@@ -1,0 +1,140 @@
+/* =====================================================================
+   Design tokens — phong cách "công viên giải trí" (lấy cảm hứng từ
+   bố cục, màu sắc và nhịp điệu của disneyland.disney.go.com).
+   Chỉ học phong cách: không dùng logo, hình ảnh, nội dung hay font
+   độc quyền của trang gốc.
+   ===================================================================== */
+
+/* Font miễn phí thay cho font thương hiệu (bo tròn, thân thiện, dễ đọc) */
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,500;6..12,700;6..12,800&display=swap");
+
+:root {
+  /* ---------- Màu: Navy (chữ, tiêu đề, nền tối) ---------- */
+  --color-navy-950: #00233c;
+  --color-navy-900: #002a3f;   /* tiêu đề thẻ (h3) */
+  --color-navy-800: #253b56;   /* màu chữ chính, tiêu đề mục (h2) */
+  --color-navy-600: #35618d;
+  --color-navy-400: #607682;
+  --color-navy-300: #78899e;   /* chữ phụ, nhãn */
+
+  /* ---------- Màu: Blue (thương hiệu, nút chính, liên kết) ---------- */
+  --color-blue-700: #0040e5;
+  --color-blue-600: #187bb7;   /* màu chính */
+  --color-blue-500: #0079bc;
+  --color-blue-400: #1994d7;   /* liên kết, trạng thái hover */
+  --color-blue-300: #82b0cf;
+  --color-blue-100: #e3ecf3;
+  --color-blue-50:  #ebf6fc;   /* nền nhạt cho vùng nổi bật */
+
+  /* ---------- Màu: Teal & Green (điểm nhấn, xác nhận) ---------- */
+  --color-teal-600:  #267f8c;  /* điểm cuối gradient nút chính */
+  --color-green-600: #468254;  /* nút hành động "tìm / xác nhận" */
+  --color-green-500: #32ae88;
+  --color-green-50:  #f9fffa;
+
+  /* ---------- Màu: Ấm (điểm nhấn lễ hội, cảnh báo) ---------- */
+  --color-gold-400:  #f5c451;
+  --color-red-600:   #c8102e;
+  --color-red-50:    #fdecef;
+
+  /* ---------- Màu: Trung tính ---------- */
+  --color-black:    #000000;
+  --color-gray-900: #252526;
+  --color-gray-700: #555555;
+  --color-gray-600: #696969;
+  --color-gray-300: #dfdfdf;
+  --color-gray-100: #f9f9f9;
+  --color-white:    #ffffff;
+
+  /* ---------- Màu theo vai trò (dùng cái này trong giao diện) ---------- */
+  --text-primary:   var(--color-navy-800);
+  --text-heading:   var(--color-navy-900);
+  --text-secondary: var(--color-navy-300);
+  --text-on-dark:   var(--color-white);
+  --text-link:      var(--color-blue-600);
+  --text-link-hover:var(--color-blue-400);
+
+  --surface-page:   var(--color-white);
+  --surface-subtle: var(--color-blue-50);
+  --surface-card:   var(--color-white);
+  --surface-input:  var(--color-white);
+  --surface-dark:   var(--color-navy-950);
+
+  --border-default: var(--color-gray-300);
+  --border-strong:  var(--color-blue-300);
+  --border-focus:   var(--color-blue-400);
+
+  --state-success:  var(--color-green-600);
+  --state-error:    var(--color-red-600);
+  --state-error-bg: var(--color-red-50);
+
+  /* ---------- Gradient ---------- */
+  --gradient-primary: linear-gradient(75deg, var(--color-blue-600) 0%, var(--color-blue-600) 49.5%, var(--color-teal-600) 100%);
+  --gradient-night:   linear-gradient(180deg, #0b1d3f 0%, #183a6b 55%, #2f6aa3 100%);
+  --gradient-sky:     linear-gradient(160deg, var(--color-blue-50) 0%, #ffffff 70%);
+
+  /* ---------- Kiểu chữ ---------- */
+  --font-family-base: "Nunito Sans", "Avenir Next", Avenir, "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+  --font-family-display: var(--font-family-base);
+
+  --font-weight-regular: 400;
+  --font-weight-medium:  500;
+  --font-weight-bold:    700;
+  --font-weight-black:   800;
+
+  /* ---------- Cỡ chữ (rem, gốc 16px) ---------- */
+  --font-size-2xs: 0.6875rem; /* 11px – chú thích nhỏ, thanh tiện ích */
+  --font-size-xs:  0.75rem;   /* 12px – nhãn ô nhập */
+  --font-size-sm:  0.875rem;  /* 14px – menu, chữ phụ */
+  --font-size-md:  1rem;      /* 16px – nội dung */
+  --font-size-lg:  1.125rem;  /* 18px – nút lớn */
+  --font-size-xl:  1.25rem;   /* 20px – tiêu đề thẻ (h3) */
+  --font-size-2xl: 1.5rem;    /* 24px – tiêu đề mục (h2) */
+  --font-size-3xl: 1.75rem;   /* 28px – tiêu đề lớn (h1) */
+  --font-size-4xl: 2.5rem;    /* 40px – tiêu đề banner */
+
+  --line-height-tight:   1.2;
+  --line-height-snug:    1.4;
+  --line-height-normal:  1.5;
+  --line-height-relaxed: 1.65;
+
+  /* ---------- Khoảng cách (bước 4px) ---------- */
+  --space-0:  0;
+  --space-1:  2px;
+  --space-2:  4px;
+  --space-3:  8px;
+  --space-4:  12px;
+  --space-5:  16px;
+  --space-6:  20px;
+  --space-7:  24px;
+  --space-8:  32px;
+  --space-9:  40px;
+  --space-10: 48px;
+  --space-11: 64px;
+  --space-12: 80px;
+
+  /* ---------- Bo góc ---------- */
+  --radius-none: 0;
+  --radius-xs:   2px;    /* ô kiểm */
+  --radius-sm:   8px;    /* ô nhập */
+  --radius-md:   10px;   /* thẻ nhỏ, tab */
+  --radius-lg:   16px;   /* thẻ, khung ảnh — dùng nhiều nhất */
+  --radius-xl:   24px;   /* khối lớn, banner */
+  --radius-pill: 999px;  /* nút bấm, chip */
+  --radius-round: 50%;   /* nút tròn, avatar */
+
+  /* ---------- Đổ bóng ---------- */
+  --shadow-sm:    0 2px 4px 0 rgba(0, 35, 60, 0.08);
+  --shadow-md:    0 4px 12px 0 rgba(0, 35, 60, 0.12);
+  --shadow-lg:    0 12px 32px 0 rgba(0, 35, 60, 0.18);
+  --shadow-focus: 0 0 0 3px rgba(25, 148, 215, 0.35);
+
+  /* ---------- Chuyển động ---------- */
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+
+  /* ---------- Bố cục ---------- */
+  --container-max: 1200px;
+  --tap-target-min: 44px;
+}

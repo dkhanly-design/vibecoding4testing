@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1. Tổng quan — Tài liệu game Đập Chuột</title>
+<link rel="stylesheet" href="docs.css">
+</head>
+<body>
+<header class="topbar"><div class="inner">
+  <a class="brand" href="index.html">🐭 Đập Chuột · Tài liệu</a>
+  <nav class="topnav" aria-label="Tài liệu">
+    <a href="index.html">Mục lục</a>
+    <a href="01-tong-quan.html" aria-current="page">1. Tổng quan</a>
+    <a href="02-chuc-nang.html">2. Chức năng</a>
+    <a href="03-man-hinh.html">3. Màn hình</a>
+    <a href="04-quy-tac-du-lieu.html">4. Quy tắc &amp; dữ liệu</a>
+    <a href="05-ke-hoach-test.html">5. Kế hoạch test</a>
+  </nav>
+</div></header>
+
+<section class="page-hero">
+  <p class="eyebrow">Tài liệu 01</p>
+  <h1>Tổng quan</h1>
+  <p>Mục tiêu, người chơi, phạm vi và các quyết định đã chốt cho phiên bản đầu tiên.</p>
+</section>
+
+<main>
+  <nav class="toc" aria-label="Trong trang này">
+    <strong>Trong trang này</strong>
+    <ol>
+      <li><a href="#gioi-thieu">Giới thiệu</a></li>
+      <li><a href="#muc-tieu">Mục tiêu</a></li>
+      <li><a href="#nguoi-choi">Người chơi &amp; thiết bị</a></li>
+      <li><a href="#vong-choi">Vòng chơi cốt lõi</a></li>
+      <li><a href="#quyet-dinh">Quyết định đã chốt</a></li>
+      <li><a href="#thay-doi">Thay đổi so với YEU-CAU.md</a></li>
+      <li><a href="#pham-vi">Phạm vi</a></li>
+      <li><a href="#rang-buoc">Ràng buộc kỹ thuật</a></li>
+      <li><a href="#thuat-ngu">Thuật ngữ</a></li>
+    </ol>
+  </nav>
+
+  <h2 id="gioi-thieu">1. Giới thiệu</h2>
+  <p><strong>Đập Chuột</strong> là mini game chạy trên trình duyệt. Người chơi bấm vào con chuột 🐭 ló lên ngẫu nhiên từ một trong 9 hang (lưới 3×3) để ghi điểm, đồng thời tránh đập trúng quả bom 💣. Mỗi lượt kéo dài 30 giây và chuột xuất hiện nhanh dần về cuối lượt.</p>
+
+  <h2 id="muc-tieu">2. Mục tiêu</h2>
+  <ul>
+    <li><strong>Người chơi:</strong> một trò chơi ngắn, dễ hiểu ngay, có cảm giác gấp gáp ở cuối lượt và lý do để chơi lại (vượt điểm trong bảng Top 5).</li>
+    <li><strong>Sản phẩm:</strong> chạy được ngay khi mở trang, không cần cài đặt, không cần máy chủ, hoạt động tốt trên cả điện thoại lẫn máy tính.</li>
+    <li><strong>Đội làm:</strong> phạm vi đủ nhỏ để làm xong và test trọn vẹn trong một vòng phát triển.</li>
+  </ul>
+
+  <h2 id="nguoi-choi">3. Người chơi &amp; thiết bị</h2>
+  <div class="table-wrap"><table>
+    <tr><th>Nhóm</th><th>Thiết bị</th><th>Cách điều khiển</th><th>Điều cần chú ý</th></tr>
+    <tr><td>Người chơi điện thoại</td><td>Điện thoại, màn hình dọc, rộng từ 320px</td><td>Chạm ngón tay</td><td>Ô đủ to để chạm, không bị cuộn hay phóng to khi chạm liên tục</td></tr>
+    <tr><td>Người chơi máy tính</td><td>Laptop / desktop, trình duyệt hiện đại</td><td>Chuột, bàn phím (phím tắt 9 ô)</td><td>Lưới không quá to trên màn hình rộng, có phím tắt</td></tr>
+  </table></div>
+  <p>Hai nhóm được thiết kế ngang nhau: mọi chức năng đều phải dùng được trên cả hai loại thiết bị.</p>
+
+  <h2 id="vong-choi">4. Vòng chơi cốt lõi</h2>
+  <ol>
+    <li>Mở trang → màn hình Bắt đầu, xem Top 5.</li>
+    <li>Bấm <strong>Bắt đầu</strong> → đếm ngược 3-2-1.</li>
+    <li>Chơi 30 giây: đập chuột (+1), tránh bom (−1). Tốc độ tăng sau giây 10 và giây 20.</li>
+    <li>Hết giờ → màn hình Kết quả. Nếu điểm vào Top 5 → nhập tên.</li>
+    <li>Xem bảng Top 5 → <strong>Chơi lại</strong>.</li>
+  </ol>
+
+  <h2 id="quyet-dinh">5. Quyết định đã chốt (từ buổi phỏng vấn)</h2>
+  <div class="table-wrap"><table>
+    <tr><th>#</th><th>Câu hỏi</th><th>Quyết định</th><th>Chi tiết tại</th></tr>
+    <tr><td class="id">Q1</td><td>Người chơi và thiết bị</td><td>Cả điện thoại và máy tính, thiết kế ngang nhau</td><td><a href="03-man-hinh.html#bo-cuc">03 · Bố cục</a></td></tr>
+    <tr><td class="id">Q2</td><td>Tốc độ chuột</td><td>Tăng dần theo thời gian, 3 pha mỗi pha 10 giây</td><td><a href="04-quy-tac-du-lieu.html#toc-do">04 · Tốc độ</a></td></tr>
+    <tr><td class="id">Q3</td><td>Yếu tố trừ điểm</td><td>Có bom: đập trúng bom −1 điểm, điểm không âm</td><td><a href="04-quy-tac-du-lieu.html#bom">04 · Bom</a></td></tr>
+    <tr><td class="id">Q4</td><td>Lưu điểm</td><td>Top 5 có tên, lưu trong trình duyệt của máy đang chơi</td><td><a href="04-quy-tac-du-lieu.html#luu-tru">04 · Lưu trữ</a></td></tr>
+    <tr><td class="id">Q5</td><td>Hình ảnh &amp; âm thanh</td><td>Emoji 🐭 💣, có âm thanh và nút bật/tắt tiếng</td><td><a href="02-chuc-nang.html#am-thanh">02 · Âm thanh</a></td></tr>
+  </table></div>
+
+  <h2 id="thay-doi">6. Thay đổi so với YEU-CAU.md</h2>
+  <div class="callout warn">
+    <span class="title">Bộ tài liệu này thay thế YEU-CAU.md ở các điểm dưới đây</span>
+    <p>Nếu hai nơi mâu thuẫn, làm theo bộ tài liệu trong thư mục <code>docs/</code>.</p>
+  </div>
+  <div class="table-wrap"><table>
+    <tr><th>Nội dung</th><th>YEU-CAU.md</th><th>Bộ tài liệu này</th></tr>
+    <tr><td>Thời gian chuột hiện</td><td>Cố định ~800 ms</td><td>Giảm dần: 900 → 700 → 550 ms theo 3 pha</td></tr>
+    <tr><td>Trừ điểm</td><td>Không có</td><td>Bom 💣: −1 điểm, điểm thấp nhất là 0</td></tr>
+    <tr><td>Điểm cao</td><td>Chỉ 1 điểm cao nhất, không tên</td><td>Bảng Top 5 có tên người chơi</td></tr>
+    <tr><td>Âm thanh</td><td>Tuỳ chọn</td><td>Bắt buộc có, kèm nút bật/tắt được ghi nhớ</td></tr>
+    <tr><td>Mức độ khó</td><td>Ngoài phạm vi</td><td>Vẫn ngoài phạm vi (độ khó tăng tự động trong lượt, không có lựa chọn Dễ/Vừa/Khó)</td></tr>
+    <tr><td>Màn hình</td><td>3 màn hình</td><td>6 màn hình: thêm Đếm ngược, Tạm dừng, Bảng Top 5</td></tr>
+  </table></div>
+
+  <h2 id="pham-vi">7. Phạm vi</h2>
+  <h3>Trong phạm vi (phiên bản 1.0)</h3>
+  <ul>
+    <li>Lưới 3×3, lượt 30 giây, 3 pha tăng tốc.</li>
+    <li>Chuột (+1) và bom (−1), tối đa một vật thể trên lưới tại một thời điểm.</li>
+    <li>Đếm ngược trước khi chơi, tự tạm dừng khi rời tab.</li>
+    <li>Bảng Top 5 có tên, lưu trong trình duyệt.</li>
+    <li>Âm thanh tạo bằng trình duyệt (không cần file âm thanh), nút bật/tắt tiếng.</li>
+    <li>Điều khiển bằng chạm, chuột và bàn phím.</li>
+    <li>Giao diện tiếng Việt, theo <a href="../design/design-system.html">design system</a>.</li>
+  </ul>
+  <h3>Ngoài phạm vi</h3>
+  <ul>
+    <li>Đăng nhập, tài khoản, bảng xếp hạng online, nhiều người chơi.</li>
+    <li>Lựa chọn mức độ khó, chế độ chơi khác, vật phẩm thưởng.</li>
+    <li>Hình vẽ riêng cho chuột / hang (dùng emoji và CSS).</li>
+    <li>Ngôn ngữ khác ngoài tiếng Việt.</li>
+  </ul>
+
+  <h2 id="rang-buoc">8. Ràng buộc kỹ thuật</h2>
+  <ul>
+    <li>Trang web tĩnh: HTML + CSS + JavaScript thuần, không thư viện ngoài, không máy chủ.</li>
+    <li>Trình duyệt hỗ trợ: Chrome, Edge, Firefox, Safari (macOS và iOS) — 2 phiên bản mới nhất.</li>
+    <li>Dùng token trong <code>design/tokens.css</code> cho màu, chữ, khoảng cách, bo góc.</li>
+    <li>Hoạt động khi không có mạng sau lần tải đầu (font dự phòng có sẵn trong máy).</li>
+  </ul>
+
+  <h2 id="thuat-ngu">9. Thuật ngữ</h2>
+  <div class="table-wrap"><table>
+    <tr><th>Thuật ngữ</th><th>Nghĩa</th></tr>
+    <tr><td>Lượt</td><td>Một lần chơi 30 giây, tính từ lúc đếm ngược xong đến khi hết giờ.</td></tr>
+    <tr><td>Hang / ô</td><td>Một trong 9 vị trí của lưới, đánh số 1–9 từ trái sang phải, trên xuống dưới.</td></tr>
+    <tr><td>Vật thể</td><td>Thứ đang ló lên ở một hang: chuột 🐭 hoặc bom 💣.</td></tr>
+    <tr><td>Thời gian hiện</td><td>Khoảng thời gian vật thể ở trên lưới trước khi tự biến mất.</td></tr>
+    <tr><td>Khoảng nghỉ</td><td>Khoảng thời gian lưới trống giữa hai vật thể.</td></tr>
+    <tr><td>Pha</td><td>Một đoạn 10 giây trong lượt, mỗi pha có tốc độ và tỉ lệ bom riêng.</td></tr>
+    <tr><td>Top 5</td><td>5 kết quả điểm cao nhất kèm tên, lưu trong trình duyệt.</td></tr>
+  </table></div>
+
+  <div class="pager">
+    <a class="btn" href="index.html">← Mục lục</a>
+    <a class="btn primary next" href="02-chuc-nang.html">2. Chức năng →</a>
+  </div>
+</main>
+
+<footer class="site">Tài liệu game Đập Chuột · 01 Tổng quan</footer>
+</body>
+</html>

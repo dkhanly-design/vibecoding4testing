@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mục lục — Tài liệu game Đập Chuột</title>
+<link rel="stylesheet" href="docs.css">
+</head>
+<body>
+<header class="topbar"><div class="inner">
+  <a class="brand" href="index.html">🐭 Đập Chuột · Tài liệu</a>
+  <nav class="topnav" aria-label="Tài liệu">
+    <a href="index.html" aria-current="page">Mục lục</a>
+    <a href="01-tong-quan.html">1. Tổng quan</a>
+    <a href="02-chuc-nang.html">2. Chức năng</a>
+    <a href="03-man-hinh.html">3. Màn hình</a>
+    <a href="04-quy-tac-du-lieu.html">4. Quy tắc &amp; dữ liệu</a>
+    <a href="05-ke-hoach-test.html">5. Kế hoạch test</a>
+  </nav>
+</div></header>
+
+<section class="page-hero">
+  <p class="eyebrow">Bộ tài liệu sản phẩm</p>
+  <h1>Mini game Đập Chuột</h1>
+  <p>Game trên trình duyệt: lưới 3×3, mỗi lượt 30 giây, chuột xuất hiện nhanh dần, có bom gây trừ điểm và bảng 5 điểm cao nhất lưu trên máy.</p>
+  <p class="meta-line">Phiên bản 1.0 · 13/11/2026 · Trạng thái: chờ duyệt, chưa viết code</p>
+</section>
+
+<main>
+  <h2>Thông số chính</h2>
+  <div class="cards stats">
+    <div class="card stat"><div class="value">3×3</div><div class="caption">Lưới 9 ô</div></div>
+    <div class="card stat"><div class="value">30s</div><div class="caption">Mỗi lượt, 3 pha tăng tốc</div></div>
+    <div class="card stat"><div class="value">+1 / −1</div><div class="caption">Đập chuột / Đập bom</div></div>
+    <div class="card stat"><div class="value">Top 5</div><div class="caption">Bảng điểm có tên, lưu trên máy</div></div>
+  </div>
+
+  <h2>Mục lục</h2>
+  <div class="cards">
+    <a class="card" href="01-tong-quan.html">
+      <span class="icon">🧭</span><span class="num">Tài liệu 01</span>
+      <h3>Tổng quan</h3>
+      <p>Mục tiêu, người chơi, phạm vi, quyết định đã chốt và thay đổi so với YEU-CAU.md.</p>
+    </a>
+    <a class="card" href="02-chuc-nang.html">
+      <span class="icon">⚙️</span><span class="num">Tài liệu 02</span>
+      <h3>Chức năng</h3>
+      <p>Danh sách chức năng có mã F-xx, mức ưu tiên và tiêu chí chấp nhận cho từng chức năng.</p>
+    </a>
+    <a class="card" href="03-man-hinh.html">
+      <span class="icon">📱</span><span class="num">Tài liệu 03</span>
+      <h3>Màn hình</h3>
+      <p>6 màn hình, wireframe, luồng chuyển màn hình và quy định bố cục điện thoại / máy tính.</p>
+    </a>
+    <a class="card" href="04-quy-tac-du-lieu.html">
+      <span class="icon">📐</span><span class="num">Tài liệu 04</span>
+      <h3>Quy tắc &amp; dữ liệu</h3>
+      <p>Tốc độ theo pha, tỉ lệ bom, cách tính điểm, cấu trúc dữ liệu lưu trong trình duyệt.</p>
+    </a>
+    <a class="card" href="05-ke-hoach-test.html">
+      <span class="icon">✅</span><span class="num">Tài liệu 05</span>
+      <h3>Kế hoạch test</h3>
+      <p>Phạm vi test, thiết bị, ca kiểm thử TC-xx và điều kiện để coi game là hoàn thành.</p>
+    </a>
+    <div class="card">
+      <span class="icon">🎨</span><span class="num">Tham khảo</span>
+      <h3>Tài liệu liên quan</h3>
+      <p><a href="../YEU-CAU.md">YEU-CAU.md</a> — yêu cầu ban đầu<br><a href="../design/design-system.html">Design system</a> — màu, chữ, thành phần</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <span class="title">Cách đọc bộ tài liệu</span>
+    <p>Đọc theo thứ tự 01 → 05. Mỗi chức năng có mã <code>F-xx</code>, mỗi màn hình có mã <code>S-xx</code>, mỗi quy tắc có mã <code>R-xx</code>, mỗi ca test có mã <code>TC-xx</code>; các tài liệu dẫn chiếu nhau bằng các mã này.</p>
+  </div>
+</main>
+
+<footer class="site">Tài liệu game Đập Chuột · Giao diện theo design/tokens.css</footer>
+</body>
+</html>

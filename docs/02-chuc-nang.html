@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2. Chức năng — Tài liệu game Đập Chuột</title>
+<link rel="stylesheet" href="docs.css">
+</head>
+<body>
+<header class="topbar"><div class="inner">
+  <a class="brand" href="index.html">🐭 Đập Chuột · Tài liệu</a>
+  <nav class="topnav" aria-label="Tài liệu">
+    <a href="index.html">Mục lục</a>
+    <a href="01-tong-quan.html">1. Tổng quan</a>
+    <a href="02-chuc-nang.html" aria-current="page">2. Chức năng</a>
+    <a href="03-man-hinh.html">3. Màn hình</a>
+    <a href="04-quy-tac-du-lieu.html">4. Quy tắc &amp; dữ liệu</a>
+    <a href="05-ke-hoach-test.html">5. Kế hoạch test</a>
+  </nav>
+</div></header>
+
+<section class="page-hero">
+  <p class="eyebrow">Tài liệu 02</p>
+  <h1>Chức năng</h1>
+  <p>18 chức năng có mã F-xx, mức ưu tiên và tiêu chí chấp nhận. Số liệu cụ thể (thời gian, tỉ lệ) nằm ở tài liệu 04.</p>
+</section>
+
+<main>
+  <nav class="toc" aria-label="Trong trang này">
+    <strong>Trong trang này</strong>
+    <ol>
+      <li><a href="#uu-tien">Mức ưu tiên</a></li>
+      <li><a href="#tong-hop">Bảng tổng hợp</a></li>
+      <li><a href="#vao-game">Vào game</a></li>
+      <li><a href="#trong-luot">Trong lượt chơi</a></li>
+      <li><a href="#am-thanh">Âm thanh</a></li>
+      <li><a href="#ket-thuc">Kết thúc &amp; bảng điểm</a></li>
+      <li><a href="#dieu-khien">Điều khiển &amp; trợ năng</a></li>
+    </ol>
+  </nav>
+
+  <h2 id="uu-tien">1. Mức ưu tiên</h2>
+  <div class="table-wrap"><table>
+    <tr><th>Mức</th><th>Ý nghĩa</th></tr>
+    <tr><td><span class="badge must">Bắt buộc</span></td><td>Thiếu thì không phát hành.</td></tr>
+    <tr><td><span class="badge should">Nên có</span></td><td>Làm trong phiên bản 1.0; chỉ bỏ nếu thiếu thời gian và phải ghi lại.</td></tr>
+    <tr><td><span class="badge could">Có thể</span></td><td>Làm nếu còn thời gian.</td></tr>
+  </table></div>
+
+  <h2 id="tong-hop">2. Bảng tổng hợp</h2>
+  <div class="table-wrap"><table>
+    <tr><th>Mã</th><th>Chức năng</th><th>Ưu tiên</th><th>Màn hình</th></tr>
+    <tr><td class="id">F-01</td><td>Bắt đầu lượt chơi</td><td><span class="badge must">Bắt buộc</span></td><td>S-01</td></tr>
+    <tr><td class="id">F-02</td><td>Đếm ngược 3-2-1</td><td><span class="badge should">Nên có</span></td><td>S-02</td></tr>
+    <tr><td class="id">F-03</td><td>Đồng hồ 30 giây</td><td><span class="badge must">Bắt buộc</span></td><td>S-03</td></tr>
+    <tr><td class="id">F-04</td><td>Vật thể xuất hiện ngẫu nhiên</td><td><span class="badge must">Bắt buộc</span></td><td>S-03</td></tr>
+    <tr><td class="id">F-05</td><td>Tăng tốc theo pha</td><td><span class="badge must">Bắt buộc</span></td><td>S-03</td></tr>
+    <tr><td class="id">F-06</td><td>Bom</td><td><span class="badge must">Bắt buộc</span></td><td>S-03</td></tr>
+    <tr><td class="id">F-07</td><td>Đập và tính điểm</td><td><span class="badge must">Bắt buộc</span></td><td>S-03</td></tr>
+    <tr><td class="id">F-08</td><td>Phản hồi hình ảnh</td><td><span class="badge must">Bắt buộc</span></td><td>S-03</td></tr>
+    <tr><td class="id">F-09</td><td>Hiệu ứng âm thanh</td><td><span class="badge must">Bắt buộc</span></td><td>S-02, S-03, S-05</td></tr>
+    <tr><td class="id">F-10</td><td>Bật / tắt tiếng</td><td><span class="badge must">Bắt buộc</span></td><td>Mọi màn hình</td></tr>
+    <tr><td class="id">F-11</td><td>Tạm dừng</td><td><span class="badge should">Nên có</span></td><td>S-03, S-04</td></tr>
+    <tr><td class="id">F-12</td><td>Kết thúc lượt và hiện kết quả</td><td><span class="badge must">Bắt buộc</span></td><td>S-05</td></tr>
+    <tr><td class="id">F-13</td><td>Nhập tên khi vào Top 5</td><td><span class="badge must">Bắt buộc</span></td><td>S-05</td></tr>
+    <tr><td class="id">F-14</td><td>Bảng Top 5</td><td><span class="badge must">Bắt buộc</span></td><td>S-01, S-06</td></tr>
+    <tr><td class="id">F-15</td><td>Chơi lại</td><td><span class="badge must">Bắt buộc</span></td><td>S-05, S-06</td></tr>
+    <tr><td class="id">F-16</td><td>Điều khiển bằng bàn phím</td><td><span class="badge should">Nên có</span></td><td>S-03</td></tr>
+    <tr><td class="id">F-17</td><td>Xoá bảng điểm</td><td><span class="badge could">Có thể</span></td><td>S-06</td></tr>
+    <tr><td class="id">F-18</td><td>Trợ năng</td><td><span class="badge should">Nên có</span></td><td>Mọi màn hình</td></tr>
+  </table></div>
+
+  <h2 id="vao-game">3. Vào game</h2>
+
+  <h3 id="f-01">F-01 · Bắt đầu lượt chơi <span class="badge must">Bắt buộc</span></h3>
+  <p>Màn hình Bắt đầu (S-01) có nút <strong>Bắt đầu</strong>. Bấm nút sẽ đặt điểm về 0, đồng hồ về 30 giây và chuyển sang Đếm ngược.</p>
+  <ul class="check-list">
+    <li>Bấm Bắt đầu nhiều lần liên tiếp chỉ tạo ra <strong>một</strong> lượt chơi (không có hai đồng hồ chạy song song).</li>
+    <li>Nút có thể bấm bằng chuột, chạm và phím <kbd>Enter</kbd> / <kbd>Space</kbd>.</li>
+  </ul>
+
+  <h3 id="f-02">F-02 · Đếm ngược 3-2-1 <span class="badge should">Nên có</span></h3>
+  <p>Hiện số 3, 2, 1 to giữa màn hình, mỗi số 1 giây, rồi chữ “Bắt đầu!” 0,5 giây. Lưới hiện mờ phía sau. Đồng hồ 30 giây chỉ chạy sau khi đếm ngược xong.</p>
+  <ul class="check-list">
+    <li>Không có vật thể nào xuất hiện và mọi cú bấm vào lưới đều bị bỏ qua trong lúc đếm ngược.</li>
+    <li>Mỗi số đi kèm một tiếng “tích” (nếu đang bật tiếng).</li>
+  </ul>
+
+  <h2 id="trong-luot">4. Trong lượt chơi</h2>
+
+  <h3 id="f-03">F-03 · Đồng hồ 30 giây <span class="badge must">Bắt buộc</span></h3>
+  <p>Đếm ngược từ 30 về 0, hiển thị theo giây nguyên (làm tròn lên). Thanh tiến trình bên dưới co lại theo thời gian.</p>
+  <ul class="check-list">
+    <li>Sai lệch so với đồng hồ thật không quá 0,2 giây sau 30 giây (tính theo thời gian thực, không cộng dồn từng nhịp).</li>
+    <li>Khi còn ≤ 5 giây, số giây chuyển sang màu cảnh báo (<code>--state-error</code>) và có tiếng “tích” mỗi giây.</li>
+    <li>Thời gian tạm dừng (F-11) không bị tính vào 30 giây.</li>
+  </ul>
+
+  <h3 id="f-04">F-04 · Vật thể xuất hiện ngẫu nhiên <span class="badge must">Bắt buộc</span></h3>
+  <p>Tại mỗi thời điểm có <strong>tối đa một</strong> vật thể (chuột hoặc bom) trên lưới. Vật thể ló lên ở một hang ngẫu nhiên, ở lại trong “thời gian hiện”, rồi tụt xuống nếu không bị đập. Sau một “khoảng nghỉ”, vật thể tiếp theo xuất hiện.</p>
+  <ul class="check-list">
+    <li>Hang mới luôn khác hang của vật thể ngay trước đó.</li>
+    <li>Vật thể đầu tiên xuất hiện trong vòng 0,5 giây sau khi đếm ngược kết thúc.</li>
+    <li>Không có vật thể mới nào xuất hiện khi còn dưới thời gian hiện tối thiểu của pha hiện tại (để không có vật thể bị cắt ngang lúc hết giờ).</li>
+  </ul>
+
+  <h3 id="f-05">F-05 · Tăng tốc theo pha <span class="badge must">Bắt buộc</span></h3>
+  <p>Lượt 30 giây chia thành 3 pha, mỗi pha 10 giây. Pha sau có thời gian hiện ngắn hơn, khoảng nghỉ ngắn hơn và tỉ lệ bom cao hơn. Số liệu tại <a href="04-quy-tac-du-lieu.html#toc-do">R-04 → R-06</a>.</p>
+  <ul class="check-list">
+    <li>Khi chuyển pha, hiện nhãn ngắn “Nhanh hơn!” trong 1 giây phía trên lưới (không che lưới).</li>
+    <li>Vật thể đang hiện lúc chuyển pha giữ nguyên thời gian hiện cũ; quy tắc pha mới áp dụng cho vật thể tiếp theo.</li>
+  </ul>
+
+  <h3 id="f-06">F-06 · Bom <span class="badge must">Bắt buộc</span></h3>
+  <p>Mỗi lần xuất hiện, vật thể có xác suất là bom 💣 theo tỉ lệ của pha. Đập trúng bom bị trừ 1 điểm. Để bom tự tụt xuống thì không mất gì.</p>
+  <ul class="check-list">
+    <li>Không bao giờ có quá 2 quả bom liên tiếp.</li>
+    <li>Bom và chuột phân biệt rõ bằng cả hình (emoji) và màu nền hang, không chỉ bằng màu.</li>
+  </ul>
+
+  <h3 id="f-07">F-07 · Đập và tính điểm <span class="badge must">Bắt buộc</span></h3>
+  <p>Bấm / chạm / nhấn phím vào hang đang có vật thể là “đập”. Chuột: +1. Bom: −1 nhưng điểm không xuống dưới 0. Hang trống: không đổi điểm.</p>
+  <ul class="check-list">
+    <li>Mỗi vật thể chỉ được tính một lần; vật thể bị đập biến mất ngay.</li>
+    <li>Điểm trên màn hình cập nhật ngay trong khung hình kế tiếp (dưới 100 ms).</li>
+    <li>Cú đập sau khi hết giờ hoặc khi đang tạm dừng không được tính.</li>
+    <li>Ghi lại số chuột đập trúng, số bom đập phải, số chuột bị bỏ lỡ để hiện ở màn hình kết quả.</li>
+  </ul>
+
+  <h3 id="f-08">F-08 · Phản hồi hình ảnh <span class="badge must">Bắt buộc</span></h3>
+  <ul>
+    <li><strong>Chuột ló lên / tụt xuống:</strong> trượt lên từ hang trong 120 ms.</li>
+    <li><strong>Đập trúng chuột:</strong> chuột bẹp lại, hiện “+1” màu xanh bay lên và mờ dần (400 ms).</li>
+    <li><strong>Đập trúng bom:</strong> hang chớp đỏ, khung lưới rung nhẹ 200 ms, hiện “−1” màu đỏ.</li>
+    <li><strong>Bấm hang trống:</strong> hang lún nhẹ, không có chữ nổi.</li>
+  </ul>
+  <ul class="check-list">
+    <li>Khi người dùng bật chế độ “giảm chuyển động” của hệ điều hành, bỏ rung và hiệu ứng bay; chỉ giữ thay đổi màu.</li>
+  </ul>
+
+  <h2 id="am-thanh">5. Âm thanh</h2>
+
+  <h3 id="f-09">F-09 · Hiệu ứng âm thanh <span class="badge must">Bắt buộc</span></h3>
+  <p>Âm thanh được tạo trực tiếp bằng trình duyệt (Web Audio), không cần file âm thanh.</p>
+  <div class="table-wrap"><table>
+    <tr><th>Sự kiện</th><th>Âm thanh</th></tr>
+    <tr><td>Đếm ngược 3-2-1, 5 giây cuối</td><td>Tiếng “tích” ngắn</td></tr>
+    <tr><td>Đập trúng chuột</td><td>Tiếng “bốp” cao, vui tai</td></tr>
+    <tr><td>Đập trúng bom</td><td>Tiếng “bùm” trầm</td></tr>
+    <tr><td>Hết giờ</td><td>Chuỗi 3 nốt đi xuống</td></tr>
+    <tr><td>Vào Top 5</td><td>Chuỗi 3 nốt đi lên</td></tr>
+  </table></div>
+  <ul class="check-list">
+    <li>Âm thanh chỉ bắt đầu sau thao tác đầu tiên của người dùng (quy định của trình duyệt về tự phát âm thanh).</li>
+    <li>Không phát tiếng khi chuột tụt xuống mà không bị đập.</li>
+  </ul>
+
+  <h3 id="f-10">F-10 · Bật / tắt tiếng <span class="badge must">Bắt buộc</span></h3>
+  <p>Nút loa 🔊 / 🔇 ở góc trên bên phải, có trên mọi màn hình. Mặc định: <strong>bật tiếng</strong>.</p>
+  <ul class="check-list">
+    <li>Trạng thái được ghi nhớ sau khi tải lại trang (xem <a href="04-quy-tac-du-lieu.html#luu-tru">R-14</a>).</li>
+    <li>Bấm nút trong lúc chơi không làm mất lượt và không bị tính là cú đập.</li>
+    <li>Nút có nhãn cho trình đọc màn hình: “Tắt tiếng” / “Bật tiếng”.</li>
+  </ul>
+
+  <h3 id="f-11">F-11 · Tạm dừng <span class="badge should">Nên có</span></h3>
+  <p>Nút ⏸ trên thanh trạng thái, hoặc phím <kbd>Esc</kbd> / <kbd>P</kbd>. Game cũng <strong>tự tạm dừng</strong> khi người chơi chuyển tab, thu nhỏ trình duyệt hoặc khoá màn hình điện thoại.</p>
+  <ul class="check-list">
+    <li>Khi tạm dừng: đồng hồ đứng, vật thể đang hiện được ẩn đi, hiện màn hình Tạm dừng (S-04).</li>
+    <li>Bấm <strong>Tiếp tục</strong> → đếm ngược 3-2-1 rồi chơi tiếp với thời gian còn lại; vật thể mới xuất hiện ở hang ngẫu nhiên.</li>
+    <li>Bấm <strong>Thoát</strong> → về màn hình Bắt đầu, lượt bị huỷ và không lưu điểm.</li>
+  </ul>
+
+  <h2 id="ket-thuc">6. Kết thúc &amp; bảng điểm</h2>
+
+  <h3 id="f-12">F-12 · Kết thúc lượt và hiện kết quả <span class="badge must">Bắt buộc</span></h3>
+  <p>Khi đồng hồ về 0: vật thể đang hiện biến mất, phát âm thanh hết giờ, hiện màn hình Kết quả (S-05) sau 0,5 giây.</p>
+  <ul class="check-list">
+    <li>Kết quả hiện: điểm, số chuột đập trúng, số bom đập phải, độ chính xác (chuột trúng / tổng số chuột đã xuất hiện, làm tròn %).</li>
+    <li>Nếu điểm cao hơn điểm hạng 1 hiện tại → hiện dòng “Kỷ lục mới!”.</li>
+  </ul>
+
+  <h3 id="f-13">F-13 · Nhập tên khi vào Top 5 <span class="badge must">Bắt buộc</span></h3>
+  <p>Nếu kết quả đủ điều kiện vào Top 5 (<a href="04-quy-tac-du-lieu.html#top5">R-11</a>), màn hình Kết quả có ô nhập tên và nút <strong>Lưu</strong>.</p>
+  <ul class="check-list">
+    <li>Ô tên điền sẵn tên đã dùng lần trước (nếu có) và được focus sẵn trên máy tính.</li>
+    <li>Quy tắc tên theo <a href="04-quy-tac-du-lieu.html#ten">R-12</a>; tên không hợp lệ hiện lỗi ngay dưới ô.</li>
+    <li>Nhấn <kbd>Enter</kbd> = bấm Lưu. Lưu xong chuyển sang Bảng Top 5 và tô sáng dòng vừa thêm.</li>
+    <li>Có nút <strong>Bỏ qua</strong>: không lưu, chuyển sang Bảng Top 5.</li>
+    <li>Kết quả không đủ điều kiện: không hiện ô nhập tên.</li>
+  </ul>
+
+  <h3 id="f-14">F-14 · Bảng Top 5 <span class="badge must">Bắt buộc</span></h3>
+  <p>Hiện tối đa 5 dòng: hạng, tên, điểm, ngày chơi (dd/mm). Hạng 1–3 có biểu tượng 🥇 🥈 🥉. Xem ở màn hình Bắt đầu (bản rút gọn) và màn hình Bảng Top 5 (S-06).</p>
+  <ul class="check-list">
+    <li>Bảng trống hiện thông báo “Chưa có ai ghi điểm. Bạn là người đầu tiên!”.</li>
+    <li>Dữ liệu còn nguyên sau khi tải lại trang hoặc đóng trình duyệt.</li>
+  </ul>
+
+  <h3 id="f-15">F-15 · Chơi lại <span class="badge must">Bắt buộc</span></h3>
+  <p>Nút <strong>Chơi lại</strong> ở màn hình Kết quả và Bảng Top 5: bắt đầu lượt mới ngay (qua Đếm ngược), điểm về 0, thời gian về 30 giây, pha về 1.</p>
+  <ul class="check-list">
+    <li>Không còn bộ đếm, âm thanh hay hiệu ứng nào của lượt cũ chạy sang lượt mới.</li>
+  </ul>
+
+  <h3 id="f-17">F-17 · Xoá bảng điểm <span class="badge could">Có thể</span></h3>
+  <p>Liên kết nhỏ “Xoá bảng điểm” dưới Bảng Top 5. Hỏi xác nhận trước khi xoá; chỉ xoá Top 5, không xoá cài đặt âm thanh.</p>
+
+  <h2 id="dieu-khien">7. Điều khiển &amp; trợ năng</h2>
+
+  <h3 id="f-16">F-16 · Điều khiển bằng bàn phím <span class="badge should">Nên có</span></h3>
+  <p>Trên máy tính, 9 hang ứng với 9 phím theo đúng vị trí trên lưới. Có hai bộ phím, dùng bộ nào cũng được:</p>
+  <div class="table-wrap"><table>
+    <tr><th>Hàng</th><th>Bàn phím số (numpad)</th><th>Phím chữ</th></tr>
+    <tr><td>Trên</td><td><kbd>7</kbd> <kbd>8</kbd> <kbd>9</kbd></td><td><kbd>Q</kbd> <kbd>W</kbd> <kbd>E</kbd></td></tr>
+    <tr><td>Giữa</td><td><kbd>4</kbd> <kbd>5</kbd> <kbd>6</kbd></td><td><kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd></td></tr>
+    <tr><td>Dưới</td><td><kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd></td><td><kbd>Z</kbd> <kbd>X</kbd> <kbd>C</kbd></td></tr>
+  </table></div>
+  <ul class="check-list">
+    <li>Giữ phím không tạo ra nhiều cú đập (bỏ qua sự kiện lặp phím).</li>
+    <li>Màn hình Bắt đầu có dòng gợi ý phím tắt; trên điện thoại dòng này bị ẩn.</li>
+  </ul>
+
+  <h3 id="f-18">F-18 · Trợ năng <span class="badge should">Nên có</span></h3>
+  <ul class="check-list">
+    <li>Điểm và thời gian được thông báo cho trình đọc màn hình ở mức vừa phải (điểm khi thay đổi, thời gian mỗi 10 giây và 5 giây cuối).</li>
+    <li>Mỗi hang là một nút có nhãn, ví dụ “Hang 5, có chuột”.</li>
+    <li>Độ tương phản chữ đạt WCAG AA; mọi nút có vòng focus rõ ràng (<code>--shadow-focus</code>).</li>
+    <li>Tôn trọng cài đặt “giảm chuyển động” (xem F-08).</li>
+  </ul>
+
+  <div class="pager">
+    <a class="btn" href="01-tong-quan.html">← 1. Tổng quan</a>
+    <a class="btn primary next" href="03-man-hinh.html">3. Màn hình →</a>
+  </div>
+</main>
+
+<footer class="site">Tài liệu game Đập Chuột · 02 Chức năng</footer>
+</body>
+</html>

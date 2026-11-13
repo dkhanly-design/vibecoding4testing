@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>5. Kế hoạch test — Tài liệu game Đập Chuột</title>
+<link rel="stylesheet" href="docs.css">
+</head>
+<body>
+<header class="topbar"><div class="inner">
+  <a class="brand" href="index.html">🐭 Đập Chuột · Tài liệu</a>
+  <nav class="topnav" aria-label="Tài liệu">
+    <a href="index.html">Mục lục</a>
+    <a href="01-tong-quan.html">1. Tổng quan</a>
+    <a href="02-chuc-nang.html">2. Chức năng</a>
+    <a href="03-man-hinh.html">3. Màn hình</a>
+    <a href="04-quy-tac-du-lieu.html">4. Quy tắc &amp; dữ liệu</a>
+    <a href="05-ke-hoach-test.html" aria-current="page">5. Kế hoạch test</a>
+  </nav>
+</div></header>
+
+<section class="page-hero">
+  <p class="eyebrow">Tài liệu 05</p>
+  <h1>Kế hoạch test</h1>
+  <p>Phạm vi, thiết bị, ca kiểm thử TC-xx và điều kiện để coi phiên bản 1.0 là hoàn thành.</p>
+</section>
+
+<main>
+  <nav class="toc" aria-label="Trong trang này">
+    <strong>Trong trang này</strong>
+    <ol>
+      <li><a href="#pham-vi">Phạm vi &amp; cách test</a></li>
+      <li><a href="#thiet-bi">Thiết bị &amp; trình duyệt</a></li>
+      <li><a href="#ho-tro">Hỗ trợ kiểm thử</a></li>
+      <li><a href="#tc-luot">Ca test: lượt chơi</a></li>
+      <li><a href="#tc-diem">Ca test: điểm &amp; bom</a></li>
+      <li><a href="#tc-top5">Ca test: Top 5 &amp; dữ liệu</a></li>
+      <li><a href="#tc-khac">Ca test: âm thanh, tạm dừng, điều khiển</a></li>
+      <li><a href="#tc-giao-dien">Ca test: giao diện &amp; trợ năng</a></li>
+      <li><a href="#hoan-thanh">Điều kiện hoàn thành</a></li>
+      <li><a href="#bao-loi">Báo lỗi</a></li>
+    </ol>
+  </nav>
+
+  <h2 id="pham-vi">1. Phạm vi &amp; cách test</h2>
+  <ul>
+    <li><strong>Trong phạm vi:</strong> toàn bộ chức năng F-01 → F-18, quy tắc R-01 → R-16, 6 màn hình S-01 → S-06.</li>
+    <li><strong>Test thủ công:</strong> chơi thật trên các thiết bị ở mục 2, theo các ca test bên dưới.</li>
+    <li><strong>Test tự động (khuyến nghị):</strong> kiểm tra các hàm tính điểm, điều kiện Top 5, chuẩn hoá tên, đọc dữ liệu lỗi — đây là phần logic thuần, dễ test bằng mã.</li>
+    <li><strong>Mức ưu tiên ca test:</strong> <span class="badge must">Cao</span> chặn phát hành nếu lỗi · <span class="badge should">Vừa</span> phải sửa trước khi phát hành nếu còn thời gian · <span class="badge could">Thấp</span> ghi nhận, sửa sau.</li>
+  </ul>
+
+  <h2 id="thiet-bi">2. Thiết bị &amp; trình duyệt</h2>
+  <div class="table-wrap"><table>
+    <tr><th>Loại</th><th>Thiết bị / hệ điều hành</th><th>Trình duyệt</th><th>Mức</th></tr>
+    <tr><td>Điện thoại</td><td>iPhone (iOS mới nhất), màn hình nhỏ ~375px</td><td>Safari</td><td><span class="badge must">Bắt buộc</span></td></tr>
+    <tr><td>Điện thoại</td><td>Android (bản mới), ~360–412px</td><td>Chrome</td><td><span class="badge must">Bắt buộc</span></td></tr>
+    <tr><td>Điện thoại nhỏ</td><td>Giả lập chiều rộng 320px</td><td>Chrome DevTools</td><td><span class="badge should">Nên có</span></td></tr>
+    <tr><td>Máy tính</td><td>macOS</td><td>Safari, Chrome</td><td><span class="badge must">Bắt buộc</span></td></tr>
+    <tr><td>Máy tính</td><td>Windows</td><td>Edge, Chrome, Firefox</td><td><span class="badge must">Bắt buộc</span></td></tr>
+    <tr><td>Máy tính bảng</td><td>iPad / Android tablet</td><td>Safari / Chrome</td><td><span class="badge could">Có thể</span></td></tr>
+  </table></div>
+
+  <h2 id="ho-tro">3. Hỗ trợ kiểm thử (đề xuất cho đội phát triển)</h2>
+  <div class="callout">
+    <span class="title">Vì game có yếu tố ngẫu nhiên và thời gian, nên có hai công cụ chỉ dùng khi test:</span>
+    <ul>
+      <li><code>?seed=123</code> trên địa chỉ trang: cố định chuỗi ngẫu nhiên (vị trí hang, bom, khoảng nghỉ) để lặp lại đúng một lượt chơi.</li>
+      <li><code>?debug=1</code>: hiện góc nhỏ ghi pha hiện tại, thời gian hiện, tỉ lệ bom và đồng hồ chính xác đến mili giây.</li>
+    </ul>
+    <p>Hai tham số này không ảnh hưởng tới người chơi thường và không được ghi vào Top 5 khi đang bật <code>debug</code>.</p>
+  </div>
+
+  <h2 id="tc-luot">4. Ca test: lượt chơi</h2>
+  <div class="table-wrap"><table>
+    <tr><th>Mã</th><th>Bước thực hiện</th><th>Kết quả mong đợi</th><th>Tham chiếu</th><th>Mức</th></tr>
+    <tr><td class="id">TC-01</td><td>Mở trang lần đầu</td><td>Hiện S-01, lưới chưa hiện, không có âm thanh, Top 5 hiện câu “Chưa có ai ghi điểm…”</td><td>F-01, F-14</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-02</td><td>Bấm Bắt đầu</td><td>Đếm 3-2-1 (mỗi số 1 giây) rồi “Bắt đầu!”; bấm lưới lúc này không có tác dụng</td><td>F-02</td><td><span class="badge should">Vừa</span></td></tr>
+    <tr><td class="id">TC-03</td><td>Bấm Bắt đầu 5 lần thật nhanh</td><td>Chỉ có 1 lượt; đồng hồ giảm đúng 1 giây mỗi giây</td><td>F-01, R-13</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-04</td><td>Bấm giờ bằng đồng hồ bấm giây từ lúc “Bắt đầu!” đến “Hết giờ!”</td><td>30 giây, sai lệch ≤ 0,2 giây</td><td>F-03, R-01</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-05</td><td>Quan sát 20 vật thể liên tiếp (không đập)</td><td>Luôn chỉ có 1 vật thể; không lần nào hai vật thể liền nhau ở cùng một hang</td><td>F-04, R-03</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-06</td><td>Bật <code>?debug=1</code>, chơi trọn lượt không đập</td><td>Pha đổi ở giây 10 và 20; thời gian hiện 900 / 700 / 550 ms; nhãn “Nhanh hơn!” xuất hiện 2 lần</td><td>F-05, R-04 → R-07</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-07</td><td>Quan sát 1 giây cuối lượt</td><td>Không có vật thể mới xuất hiện nếu không đủ thời gian hiện; không vật thể nào bị cắt ngang lúc hết giờ</td><td>R-07a</td><td><span class="badge should">Vừa</span></td></tr>
+    <tr><td class="id">TC-08</td><td>Còn 5 giây</td><td>Số giây và thanh thời gian chuyển đỏ; có tiếng “tích” mỗi giây</td><td>F-03</td><td><span class="badge should">Vừa</span></td></tr>
+    <tr><td class="id">TC-09</td><td>Hết giờ</td><td>Vật thể biến mất, phát âm hết giờ, sau 0,5 giây hiện S-05 với đúng điểm</td><td>F-12</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-10</td><td>Bấm Chơi lại từ S-05 và từ S-06</td><td>Lượt mới: điểm 0, 30 giây, pha 1; không còn âm thanh / hiệu ứng của lượt cũ</td><td>F-15</td><td><span class="badge must">Cao</span></td></tr>
+  </table></div>
+
+  <h2 id="tc-diem">5. Ca test: điểm &amp; bom</h2>
+  <div class="table-wrap"><table>
+    <tr><th>Mã</th><th>Bước thực hiện</th><th>Kết quả mong đợi</th><th>Tham chiếu</th><th>Mức</th></tr>
+    <tr><td class="id">TC-11</td><td>Đập trúng chuột</td><td>+1 điểm ngay; chuột biến mất; hiện “+1”</td><td>F-07, F-08, R-09</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-12</td><td>Bấm liên tục 5 lần thật nhanh vào cùng một con chuột</td><td>Chỉ +1 điểm</td><td>F-07</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-13</td><td>Bấm hang trống</td><td>Điểm không đổi; hang lún nhẹ</td><td>R-09</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-14</td><td>Có điểm ≥ 1, đập trúng bom</td><td>−1 điểm; hang chớp đỏ, lưới rung; hiện “−1”</td><td>F-06, F-08</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-15</td><td>Đang 0 điểm, đập trúng bom</td><td>Điểm vẫn 0; “bom đập phải” ở kết quả vẫn tăng</td><td>R-09a</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-16</td><td>Chạy 10 lượt với <code>?seed</code> khác nhau, ghi lại thứ tự vật thể</td><td>Vật thể đầu tiên luôn là chuột; không có 3 bom liên tiếp; tỉ lệ bom gần 10 / 15 / 20% theo pha</td><td>R-06, R-08</td><td><span class="badge should">Vừa</span></td></tr>
+    <tr><td class="id">TC-17</td><td>Kết thúc lượt, so thống kê với số lần đập đã đếm tay</td><td>Chuột trúng, bom đập phải, độ chính xác đúng công thức R-10</td><td>F-12, R-10</td><td><span class="badge should">Vừa</span></td></tr>
+    <tr><td class="id">TC-18</td><td>Đập đúng lúc đồng hồ về 0</td><td>Cú đập sau thời điểm hết giờ không được tính</td><td>F-07</td><td><span class="badge should">Vừa</span></td></tr>
+  </table></div>
+
+  <h2 id="tc-top5">6. Ca test: Top 5 &amp; dữ liệu</h2>
+  <div class="table-wrap"><table>
+    <tr><th>Mã</th><th>Bước thực hiện</th><th>Kết quả mong đợi</th><th>Tham chiếu</th><th>Mức</th></tr>
+    <tr><td class="id">TC-19</td><td>Bảng trống, kết thúc lượt với 0 điểm</td><td>Không hiện ô nhập tên</td><td>R-11</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-20</td><td>Bảng trống, kết thúc lượt với ≥ 1 điểm, nhập tên, Lưu</td><td>Hiện “Kỷ lục mới!”; chuyển S-06, dòng mới hạng 1, tô sáng</td><td>F-13, R-11c</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-21</td><td>Bảng đủ 5 dòng, thấp nhất 20 điểm; lượt mới đạt 20 điểm</td><td>Không vào bảng; hiện “Cần thêm 1 điểm để vào Top 5”</td><td>R-11, R-11d</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-22</td><td>Bảng đủ 5 dòng; lượt mới đạt 21 điểm, lưu</td><td>Dòng 20 điểm bị loại; bảng vẫn 5 dòng, đúng thứ tự</td><td>R-11a, R-11b</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-23</td><td>Nhập tên: chỉ khoảng trắng; 13 ký tự; “  Lan   Anh ”; “Đức 🐭”; <code>&lt;b&gt;x&lt;/b&gt;</code></td><td>Báo lỗi trống; không gõ được ký tự thứ 13; lưu thành “Lan Anh”; lưu được tiếng Việt + emoji; thẻ HTML hiện nguyên văn, không in đậm</td><td>R-12 → R-12b</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-24</td><td>Lưu điểm, tải lại trang, đóng mở lại trình duyệt</td><td>Top 5 và tên lần trước còn nguyên</td><td>F-14, R-14</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-25</td><td>Sửa tay <code>dapchuot.v1.top5</code> thành <code>abc</code> rồi tải lại; thử thêm một dòng có <code>score: -5</code></td><td>Game chạy bình thường; bảng trống ở trường hợp 1; dòng sai bị bỏ ở trường hợp 2</td><td>R-15, R-15a</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-26</td><td>Chơi trong chế độ riêng tư của Safari</td><td>Chơi bình thường; nếu không lưu được thì hiện thông báo, không báo lỗi kỹ thuật</td><td>R-15b</td><td><span class="badge should">Vừa</span></td></tr>
+    <tr><td class="id">TC-27</td><td>Bấm “Xoá bảng điểm” → Huỷ, rồi → Đồng ý</td><td>Huỷ: không đổi. Đồng ý: bảng trống, cài đặt âm thanh giữ nguyên</td><td>F-17</td><td><span class="badge could">Thấp</span></td></tr>
+  </table></div>
+
+  <h2 id="tc-khac">7. Ca test: âm thanh, tạm dừng, điều khiển</h2>
+  <div class="table-wrap"><table>
+    <tr><th>Mã</th><th>Bước thực hiện</th><th>Kết quả mong đợi</th><th>Tham chiếu</th><th>Mức</th></tr>
+    <tr><td class="id">TC-28</td><td>Chơi một lượt có bật tiếng</td><td>Nghe đủ: tích (đếm ngược, 5 giây cuối), bốp (chuột), bùm (bom), hết giờ; không có tiếng khi chuột tự tụt xuống</td><td>F-09</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-29</td><td>Tắt tiếng giữa lượt; tải lại trang</td><td>Im lặng ngay; lượt không bị gián đoạn; sau tải lại vẫn tắt tiếng</td><td>F-10</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-30</td><td>Bấm ⏸ khi còn 17 giây → Tiếp tục</td><td>Đồng hồ dừng ở 17, lưới bị ẩn; tiếp tục qua đếm ngược, chơi tiếp từ 17 giây</td><td>F-11</td><td><span class="badge should">Vừa</span></td></tr>
+    <tr><td class="id">TC-31</td><td>Đang chơi thì chuyển tab 10 giây rồi quay lại; trên điện thoại thì khoá màn hình</td><td>Game đã tự tạm dừng; thời gian còn lại không bị trừ 10 giây</td><td>F-11</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-32</td><td>Tạm dừng → Thoát</td><td>Về S-01; lượt bị huỷ, không lưu điểm</td><td>F-11</td><td><span class="badge should">Vừa</span></td></tr>
+    <tr><td class="id">TC-33</td><td>Máy tính: chơi chỉ bằng phím Q–C và bàn phím số; giữ một phím</td><td>Đúng hang theo bảng phím; giữ phím chỉ tính 1 cú đập</td><td>F-16</td><td><span class="badge should">Vừa</span></td></tr>
+    <tr><td class="id">TC-34</td><td>Điện thoại: chạm đúp, chạm giữ, vuốt trên lưới khi đang chơi</td><td>Không phóng to, không cuộn, không hiện menu hay tô chọn chữ</td><td>03 · Bố cục</td><td><span class="badge must">Cao</span></td></tr>
+  </table></div>
+
+  <h2 id="tc-giao-dien">8. Ca test: giao diện &amp; trợ năng</h2>
+  <div class="table-wrap"><table>
+    <tr><th>Mã</th><th>Bước thực hiện</th><th>Kết quả mong đợi</th><th>Tham chiếu</th><th>Mức</th></tr>
+    <tr><td class="id">TC-35</td><td>Xem 6 màn hình ở 320px, 375px, 768px, 1440px; xoay ngang điện thoại</td><td>Không tràn, không cắt chữ; lưới vuông, nằm trọn trong màn hình; hang đạt kích thước tối thiểu</td><td>03 · Bố cục</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-36</td><td>So màu, chữ, nút với design system</td><td>Dùng đúng token, kiểu nút và ô nhập theo 03 · Quy định giao diện</td><td>03 · Giao diện</td><td><span class="badge should">Vừa</span></td></tr>
+    <tr><td class="id">TC-37</td><td>Chỉ dùng phím <kbd>Tab</kbd> / <kbd>Enter</kbd> đi hết luồng: bắt đầu → chơi → lưu tên → chơi lại</td><td>Làm được hết; luôn thấy vòng focus</td><td>F-18</td><td><span class="badge should">Vừa</span></td></tr>
+    <tr><td class="id">TC-38</td><td>Bật VoiceOver / TalkBack</td><td>Đọc được tên nút, “Hang 5, có chuột”, điểm khi thay đổi</td><td>F-18</td><td><span class="badge could">Thấp</span></td></tr>
+    <tr><td class="id">TC-39</td><td>Bật “Giảm chuyển động” trong hệ điều hành</td><td>Không rung lưới, không chữ bay; vẫn đổi màu khi đập</td><td>F-08, F-18</td><td><span class="badge could">Thấp</span></td></tr>
+    <tr><td class="id">TC-40</td><td>Mở công cụ nhà phát triển, chơi 3 lượt liên tiếp</td><td>Không có lỗi nào trong console</td><td>—</td><td><span class="badge must">Cao</span></td></tr>
+  </table></div>
+
+  <h2 id="hoan-thanh">9. Điều kiện hoàn thành</h2>
+  <div class="callout ok">
+    <span class="title">Phiên bản 1.0 được phát hành khi:</span>
+    <ul class="check-list">
+      <li>100% ca test mức <strong>Cao</strong> đạt trên tất cả thiết bị “Bắt buộc”.</li>
+      <li>≥ 90% ca test mức <strong>Vừa</strong> đạt; ca chưa đạt đã được ghi lại và chấp nhận.</li>
+      <li>Toàn bộ chức năng <strong>Bắt buộc</strong> trong tài liệu 02 đã có.</li>
+      <li>Không còn lỗi làm game dừng, treo, tính sai điểm hoặc mất dữ liệu Top 5.</li>
+      <li>Trang tải xong và chơi được trong 2 giây trên mạng 4G.</li>
+    </ul>
+  </div>
+
+  <h2 id="bao-loi">10. Báo lỗi</h2>
+  <p>Mỗi lỗi ghi đủ các mục sau để tái hiện được:</p>
+  <div class="table-wrap"><table>
+    <tr><th>Mục</th><th>Ví dụ</th></tr>
+    <tr><td>Mã ca test</td><td>TC-12</td></tr>
+    <tr><td>Thiết bị, trình duyệt</td><td>iPhone 15, iOS 19, Safari</td></tr>
+    <tr><td>Địa chỉ trang (kèm <code>?seed</code> nếu có)</td><td>…/index.html?seed=42</td></tr>
+    <tr><td>Các bước</td><td>1. Bắt đầu 2. Chạm nhanh 5 lần vào chuột đầu tiên</td></tr>
+    <tr><td>Mong đợi / Thực tế</td><td>+1 điểm / +3 điểm</td></tr>
+    <tr><td>Mức độ</td><td>Nghiêm trọng · Cao · Vừa · Thấp</td></tr>
+    <tr><td>Ảnh / video</td><td>Đính kèm nếu có</td></tr>
+  </table></div>
+
+  <div class="pager">
+    <a class="btn" href="04-quy-tac-du-lieu.html">← 4. Quy tắc &amp; dữ liệu</a>
+    <a class="btn primary next" href="index.html">Về mục lục →</a>
+  </div>
+</main>
+
+<footer class="site">Tài liệu game Đập Chuột · 05 Kế hoạch test</footer>
+</body>
+</html>

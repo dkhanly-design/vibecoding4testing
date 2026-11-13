@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4. Quy tắc &amp; dữ liệu — Tài liệu game Đập Chuột</title>
+<link rel="stylesheet" href="docs.css">
+</head>
+<body>
+<header class="topbar"><div class="inner">
+  <a class="brand" href="index.html">🐭 Đập Chuột · Tài liệu</a>
+  <nav class="topnav" aria-label="Tài liệu">
+    <a href="index.html">Mục lục</a>
+    <a href="01-tong-quan.html">1. Tổng quan</a>
+    <a href="02-chuc-nang.html">2. Chức năng</a>
+    <a href="03-man-hinh.html">3. Màn hình</a>
+    <a href="04-quy-tac-du-lieu.html" aria-current="page">4. Quy tắc &amp; dữ liệu</a>
+    <a href="05-ke-hoach-test.html">5. Kế hoạch test</a>
+  </nav>
+</div></header>
+
+<section class="page-hero">
+  <p class="eyebrow">Tài liệu 04</p>
+  <h1>Quy tắc &amp; dữ liệu</h1>
+  <p>Mọi con số của game, cách tính điểm, điều kiện vào Top 5 và cấu trúc dữ liệu lưu trong trình duyệt.</p>
+</section>
+
+<main>
+  <nav class="toc" aria-label="Trong trang này">
+    <strong>Trong trang này</strong>
+    <ol>
+      <li><a href="#co-ban">Quy tắc cơ bản</a></li>
+      <li><a href="#toc-do">Tốc độ theo pha</a></li>
+      <li><a href="#bom">Bom</a></li>
+      <li><a href="#diem">Tính điểm</a></li>
+      <li><a href="#top5">Top 5</a></li>
+      <li><a href="#ten">Tên người chơi</a></li>
+      <li><a href="#trang-thai">Trạng thái game</a></li>
+      <li><a href="#luu-tru">Dữ liệu lưu trữ</a></li>
+      <li><a href="#loi">Xử lý dữ liệu lỗi</a></li>
+      <li><a href="#cau-hinh">Bảng cấu hình</a></li>
+    </ol>
+  </nav>
+
+  <h2 id="co-ban">1. Quy tắc cơ bản</h2>
+  <div class="table-wrap"><table>
+    <tr><th>Mã</th><th>Quy tắc</th></tr>
+    <tr><td class="id">R-01</td><td>Một lượt dài đúng <strong>30 giây</strong> thời gian chơi, không tính đếm ngược và thời gian tạm dừng.</td></tr>
+    <tr><td class="id">R-02</td><td>9 hang đánh số 1–9 từ trái sang phải, trên xuống dưới (hang 1 ở góc trên trái, hang 9 ở góc dưới phải).</td></tr>
+    <tr><td class="id">R-03</td><td>Tối đa <strong>một vật thể</strong> trên lưới tại một thời điểm. Hang của vật thể mới được chọn ngẫu nhiên đều trong 8 hang <strong>khác</strong> hang trước đó.</td></tr>
+  </table></div>
+
+  <h2 id="toc-do">2. Tốc độ theo pha</h2>
+  <div class="phases">
+    <div class="phase"><strong>Pha 1 · 0–10 s</strong><span>Khởi động: chậm, ít bom</span></div>
+    <div class="phase"><strong>Pha 2 · 10–20 s</strong><span>Tăng tốc</span></div>
+    <div class="phase"><strong>Pha 3 · 20–30 s</strong><span>Nước rút: nhanh, nhiều bom</span></div>
+  </div>
+  <div class="table-wrap"><table>
+    <tr><th>Mã</th><th>Thông số</th><th>Pha 1</th><th>Pha 2</th><th>Pha 3</th></tr>
+    <tr><td class="id">R-04</td><td>Thời gian hiện của vật thể</td><td>900 ms</td><td>700 ms</td><td>550 ms</td></tr>
+    <tr><td class="id">R-05</td><td>Khoảng nghỉ giữa hai vật thể (ngẫu nhiên đều trong khoảng)</td><td>400–700 ms</td><td>300–550 ms</td><td>200–400 ms</td></tr>
+    <tr><td class="id">R-06</td><td>Xác suất vật thể là bom</td><td>10%</td><td>15%</td><td>20%</td></tr>
+    <tr><td></td><td>Số vật thể ước tính nếu không đập (trung bình)</td><td>~7</td><td>~9</td><td>~12</td></tr>
+  </table></div>
+  <ul>
+    <li><strong>R-07:</strong> Pha được xác định tại thời điểm vật thể xuất hiện. Vật thể giữ thông số của pha lúc nó xuất hiện cho đến khi biến mất.</li>
+    <li><strong>R-07a:</strong> Không cho vật thể mới xuất hiện nếu thời gian còn lại ít hơn thời gian hiện của pha đó; lưới để trống cho đến hết giờ.</li>
+    <li><strong>R-07b:</strong> Khi vật thể bị đập, khoảng nghỉ bắt đầu tính ngay từ lúc đập (không chờ hết thời gian hiện). Vì vậy đập càng nhanh thì càng nhiều vật thể.</li>
+  </ul>
+
+  <h2 id="bom">3. Bom</h2>
+  <ul>
+    <li><strong>R-08:</strong> Vật thể đầu tiên của lượt luôn là chuột.</li>
+    <li><strong>R-08a:</strong> Không có quá 2 bom liên tiếp; nếu 2 vật thể trước đều là bom thì vật thể tiếp theo bắt buộc là chuột.</li>
+    <li><strong>R-08b:</strong> Bom có cùng thời gian hiện với chuột trong cùng pha.</li>
+  </ul>
+
+  <h2 id="diem">4. Tính điểm</h2>
+  <div class="table-wrap"><table>
+    <tr><th>Mã</th><th>Hành động</th><th>Điểm</th><th>Thống kê ghi nhận</th></tr>
+    <tr><td class="id">R-09</td><td>Đập trúng chuột</td><td><strong>+1</strong></td><td>chuột trúng +1</td></tr>
+    <tr><td class="id">R-09</td><td>Đập trúng bom</td><td><strong>−1</strong> (thấp nhất là 0)</td><td>bom đập phải +1</td></tr>
+    <tr><td class="id">R-09</td><td>Bấm hang trống</td><td>0</td><td>—</td></tr>
+    <tr><td class="id">R-09</td><td>Chuột tự tụt xuống</td><td>0</td><td>chuột bỏ lỡ +1</td></tr>
+    <tr><td class="id">R-09</td><td>Bom tự tụt xuống</td><td>0</td><td>—</td></tr>
+  </table></div>
+  <ul>
+    <li><strong>R-09a:</strong> Điểm là số nguyên, bắt đầu từ 0 mỗi lượt, không bao giờ âm. Ví dụ: đang 0 điểm đập bom → vẫn 0, nhưng “bom đập phải” vẫn tăng.</li>
+    <li><strong>R-10:</strong> Độ chính xác = chuột trúng ÷ (chuột trúng + chuột bỏ lỡ), làm tròn đến số nguyên %. Nếu chưa có con chuột nào xuất hiện, hiện “—”.</li>
+  </ul>
+
+  <h2 id="top5">5. Top 5</h2>
+  <ul>
+    <li><strong>R-11 — Điều kiện vào Top 5:</strong> điểm &gt; 0 <strong>và</strong> (bảng chưa đủ 5 dòng <strong>hoặc</strong> điểm lớn hơn hẳn điểm thấp nhất trong bảng).</li>
+    <li><strong>R-11a — Sắp xếp:</strong> điểm giảm dần; bằng điểm thì kết quả có trước xếp trên. Vì vậy kết quả mới bằng điểm với dòng thấp nhất của bảng đã đủ 5 dòng thì <em>không</em> vào bảng.</li>
+    <li><strong>R-11b:</strong> Khi thêm dòng mới vào bảng đã đủ 5 dòng, dòng xếp cuối bị loại.</li>
+    <li><strong>R-11c — “Kỷ lục mới”:</strong> điểm lớn hơn hẳn điểm hạng 1 hiện có, hoặc bảng đang trống và điểm &gt; 0.</li>
+    <li><strong>R-11d — “Cần thêm N điểm”:</strong> N = điểm thấp nhất trong bảng − điểm của lượt + 1 (chỉ hiện khi bảng đủ 5 dòng).</li>
+  </ul>
+
+  <h2 id="ten">6. Tên người chơi</h2>
+  <ul>
+    <li><strong>R-12:</strong> Trước khi kiểm tra: bỏ khoảng trắng đầu/cuối, gộp nhiều khoảng trắng liền nhau thành một.</li>
+    <li><strong>R-12a:</strong> Độ dài 1–12 ký tự, đếm theo ký tự hiển thị (một emoji hoặc một chữ có dấu tiếng Việt tính là 1 ký tự). Ô nhập không cho gõ quá 12 ký tự.</li>
+    <li><strong>R-12b:</strong> Cho phép mọi chữ (kể cả tiếng Việt có dấu), số, khoảng trắng và emoji. Tên luôn được hiển thị dưới dạng văn bản thuần, không bao giờ được hiểu là mã HTML.</li>
+    <li><strong>R-12c:</strong> Cho phép trùng tên giữa các dòng.</li>
+    <li><strong>R-12d:</strong> Tên lưu thành công được nhớ để điền sẵn lần sau (R-14).</li>
+  </ul>
+
+  <h2 id="trang-thai">7. Trạng thái game</h2>
+<pre><code>idle ──start──▶ countdown ──3s──▶ playing ──hết giờ──▶ ended
+                    ▲                │  ▲                 │
+                    │            pause  resume*            │ restart
+                    │                ▼  │                  │
+                    │              paused ──quit──▶ idle   │
+                    └──────────────────────────────────────┘
+* resume đi qua countdown trước khi quay lại playing</code></pre>
+  <div class="table-wrap"><table>
+    <tr><th>Trạng thái</th><th>Màn hình</th><th>Đồng hồ</th><th>Nhận cú đập</th></tr>
+    <tr><td><code>idle</code></td><td>S-01, S-06</td><td>Dừng</td><td>Không</td></tr>
+    <tr><td><code>countdown</code></td><td>S-02</td><td>Dừng</td><td>Không</td></tr>
+    <tr><td><code>playing</code></td><td>S-03</td><td>Chạy</td><td>Có</td></tr>
+    <tr><td><code>paused</code></td><td>S-04</td><td>Dừng</td><td>Không</td></tr>
+    <tr><td><code>ended</code></td><td>S-05</td><td>Dừng ở 0</td><td>Không</td></tr>
+  </table></div>
+  <p><strong>R-13:</strong> Chỉ được có một bộ hẹn giờ cho đồng hồ và một bộ hẹn giờ cho vật thể đang hoạt động. Mọi chuyển trạng thái rời khỏi <code>playing</code> phải huỷ cả hai.</p>
+
+  <h2 id="luu-tru">8. Dữ liệu lưu trữ</h2>
+  <p><strong>R-14:</strong> Dữ liệu chỉ lưu trong <code>localStorage</code> của trình duyệt trên máy đang chơi. Không gửi đi đâu, không dùng cookie.</p>
+  <div class="table-wrap"><table>
+    <tr><th>Khoá</th><th>Nội dung</th><th>Khi nào ghi</th></tr>
+    <tr><td><code>dapchuot.v1.top5</code></td><td>Bảng Top 5</td><td>Khi bấm Lưu (F-13), khi xoá bảng (F-17)</td></tr>
+    <tr><td><code>dapchuot.v1.settings</code></td><td>Cài đặt âm thanh, tên dùng lần trước</td><td>Khi bật/tắt tiếng, khi lưu tên</td></tr>
+  </table></div>
+
+  <h3>Cấu trúc <code>dapchuot.v1.top5</code></h3>
+<pre><code>[
+  { "name": "Lan",  "score": 42, "playedAt": "2026-11-12T08:15:30.000Z" },
+  { "name": "Minh", "score": 37, "playedAt": "2026-11-10T13:02:11.000Z" }
+]</code></pre>
+  <div class="table-wrap"><table>
+    <tr><th>Trường</th><th>Kiểu</th><th>Ràng buộc</th></tr>
+    <tr><td><code>name</code></td><td>chuỗi</td><td>Theo R-12, đã chuẩn hoá</td></tr>
+    <tr><td><code>score</code></td><td>số nguyên</td><td>≥ 1</td></tr>
+    <tr><td><code>playedAt</code></td><td>chuỗi thời gian ISO 8601 (UTC)</td><td>Thời điểm kết thúc lượt; hiển thị theo giờ máy dạng dd/mm</td></tr>
+  </table></div>
+  <p>Mảng tối đa 5 phần tử, luôn được lưu theo đúng thứ tự R-11a.</p>
+
+  <h3>Cấu trúc <code>dapchuot.v1.settings</code></h3>
+<pre><code>{ "sound": true, "lastName": "Lan" }</code></pre>
+  <div class="table-wrap"><table>
+    <tr><th>Trường</th><th>Kiểu</th><th>Mặc định</th></tr>
+    <tr><td><code>sound</code></td><td>true / false</td><td><code>true</code> (bật tiếng)</td></tr>
+    <tr><td><code>lastName</code></td><td>chuỗi</td><td>Chuỗi rỗng</td></tr>
+  </table></div>
+
+  <h2 id="loi">9. Xử lý dữ liệu lỗi</h2>
+  <ul>
+    <li><strong>R-15:</strong> Nếu dữ liệu đọc ra không phải JSON hợp lệ hoặc sai cấu trúc → coi như bảng trống / cài đặt mặc định, ghi đè dữ liệu đúng ở lần lưu tiếp theo. Game không được dừng hay báo lỗi kỹ thuật.</li>
+    <li><strong>R-15a:</strong> Dòng nào trong Top 5 sai ràng buộc (thiếu tên, điểm không phải số nguyên ≥ 1, ngày sai) thì bỏ dòng đó, giữ các dòng còn lại, sắp xếp lại.</li>
+    <li><strong>R-15b:</strong> Nếu trình duyệt không cho dùng <code>localStorage</code> (chế độ riêng tư, bộ nhớ đầy) → game vẫn chơi bình thường; Top 5 chỉ giữ trong phiên hiện tại và hiện thông báo “Không lưu được điểm trên trình duyệt này”.</li>
+    <li><strong>R-16:</strong> Đổi cấu trúc dữ liệu trong tương lai thì tăng số phiên bản trong tên khoá (<code>v2</code>), không sửa ngầm dữ liệu <code>v1</code>.</li>
+  </ul>
+
+  <h2 id="cau-hinh">10. Bảng cấu hình</h2>
+  <p>Các thông số dưới đây phải gom vào một chỗ trong mã nguồn để chỉnh mà không phải sửa logic.</p>
+<pre><code>ROUND_SECONDS      = 30
+COUNTDOWN_SECONDS  = 3
+GRID_SIZE          = 3
+WARNING_SECONDS    = 5
+LEADERBOARD_SIZE   = 5
+NAME_MAX_LENGTH    = 12
+MAX_BOMB_STREAK    = 2
+PHASES = [
+  { from: 0,  showMs: 900, gapMs: [400, 700], bombRate: 0.10 },
+  { from: 10, showMs: 700, gapMs: [300, 550], bombRate: 0.15 },
+  { from: 20, showMs: 550, gapMs: [200, 400], bombRate: 0.20 },
+]</code></pre>
+
+  <div class="pager">
+    <a class="btn" href="03-man-hinh.html">← 3. Màn hình</a>
+    <a class="btn primary next" href="05-ke-hoach-test.html">5. Kế hoạch test →</a>
+  </div>
+</main>
+
+<footer class="site">Tài liệu game Đập Chuột · 04 Quy tắc &amp; dữ liệu</footer>
+</body>
+</html>
