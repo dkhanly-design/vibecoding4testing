@@ -23,6 +23,7 @@
   <p class="eyebrow">Tài liệu 02</p>
   <h1>Chức năng</h1>
   <p>18 chức năng có mã F-xx, mức ưu tiên và tiêu chí chấp nhận. Số liệu cụ thể (thời gian, tỉ lệ) nằm ở tài liệu 04.</p>
+  <p class="meta-line">Bổ sung 17/11/2026: F-19 → F-31 (đăng ký người chơi, trang quản trị)</p>
 </section>
 
 <main>
@@ -36,6 +37,8 @@
       <li><a href="#am-thanh">Âm thanh</a></li>
       <li><a href="#ket-thuc">Kết thúc &amp; bảng điểm</a></li>
       <li><a href="#dieu-khien">Điều khiển &amp; trợ năng</a></li>
+      <li><a href="#dang-ky">Đăng ký người chơi <span class="badge new">Mới</span></a></li>
+      <li><a href="#admin">Trang quản trị <span class="badge new">Mới</span></a></li>
     </ol>
   </nav>
 
@@ -68,6 +71,19 @@
     <tr><td class="id">F-16</td><td>Điều khiển bằng bàn phím</td><td><span class="badge should">Nên có</span></td><td>S-03</td></tr>
     <tr><td class="id">F-17</td><td>Xoá bảng điểm</td><td><span class="badge could">Có thể</span></td><td>S-06</td></tr>
     <tr><td class="id">F-18</td><td>Trợ năng</td><td><span class="badge should">Nên có</span></td><td>Mọi màn hình</td></tr>
+    <tr><td class="id">F-19</td><td>Đăng ký người chơi <span class="badge new">Mới</span></td><td><span class="badge must">Bắt buộc</span></td><td>S-07</td></tr>
+    <tr><td class="id">F-20</td><td>Nhận lại người chơi theo email <span class="badge new">Mới</span></td><td><span class="badge must">Bắt buộc</span></td><td>S-07</td></tr>
+    <tr><td class="id">F-21</td><td>Ghi nhớ người chơi trên máy, đổi người chơi <span class="badge new">Mới</span></td><td><span class="badge must">Bắt buộc</span></td><td>S-01, S-07</td></tr>
+    <tr><td class="id">F-22</td><td>Gửi điểm lên máy chủ <span class="badge new">Mới</span></td><td><span class="badge must">Bắt buộc</span></td><td>S-05</td></tr>
+    <tr><td class="id">F-23</td><td>Đồng ý xử lý dữ liệu cá nhân <span class="badge new">Mới</span></td><td><span class="badge must">Bắt buộc</span></td><td>S-07</td></tr>
+    <tr><td class="id">F-24</td><td>Đăng nhập admin <span class="badge new">Mới</span></td><td><span class="badge must">Bắt buộc</span></td><td>S-08</td></tr>
+    <tr><td class="id">F-25</td><td>Đăng xuất và hết phiên admin <span class="badge new">Mới</span></td><td><span class="badge must">Bắt buộc</span></td><td>S-09</td></tr>
+    <tr><td class="id">F-26</td><td>Danh sách người chơi <span class="badge new">Mới</span></td><td><span class="badge must">Bắt buộc</span></td><td>S-09</td></tr>
+    <tr><td class="id">F-27</td><td>Tìm kiếm người chơi <span class="badge new">Mới</span></td><td><span class="badge must">Bắt buộc</span></td><td>S-09</td></tr>
+    <tr><td class="id">F-28</td><td>Xoá người chơi <span class="badge new">Mới</span></td><td><span class="badge must">Bắt buộc</span></td><td>S-09, S-10</td></tr>
+    <tr><td class="id">F-29</td><td>Xuất danh sách ra CSV <span class="badge new">Mới</span></td><td><span class="badge must">Bắt buộc</span></td><td>S-09</td></tr>
+    <tr><td class="id">F-30</td><td>Chống lạm dụng (giới hạn số lần thử) <span class="badge new">Mới</span></td><td><span class="badge should">Nên có</span></td><td>S-07, S-08</td></tr>
+    <tr><td class="id">F-31</td><td>Nhật ký thao tác admin <span class="badge new">Mới</span></td><td><span class="badge should">Nên có</span></td><td>—</td></tr>
   </table></div>
 
   <h2 id="vao-game">3. Vào game</h2>
@@ -228,6 +244,133 @@
     <li>Độ tương phản chữ đạt WCAG AA; mọi nút có vòng focus rõ ràng (<code>--shadow-focus</code>).</li>
     <li>Tôn trọng cài đặt “giảm chuyển động” (xem F-08).</li>
   </ul>
+
+  <!-- ===================== BỔ SUNG: ĐĂNG KÝ & QUẢN TRỊ ===================== -->
+  <h2 id="dang-ky">8. Đăng ký người chơi <span class="badge new">Mới</span></h2>
+  <div class="callout warn">
+    <span class="title">Mở rộng phạm vi so với tài liệu 01</span>
+    <p>Tài liệu 01 ghi phiên bản 1.0 “không máy chủ, không tài khoản”. Từ mục này, game cần <strong>máy chủ và database</strong> để lưu người chơi và điểm. Top 5 vẫn lưu trên máy như cũ (F-14).</p>
+  </div>
+  <div class="callout">
+    <span class="title">Quyết định đã chốt (phỏng vấn lần 2)</span>
+    <ul>
+      <li><strong>Q6 · Tần suất đăng ký:</strong> một lần trên mỗi máy (trình duyệt). Nhập email đã có → coi là cùng người chơi, cập nhật họ tên và số điện thoại.</li>
+      <li><strong>Q7 · Điểm:</strong> mỗi lượt gửi điểm lên máy chủ, gắn với người chơi. Top 5 vẫn lưu trên máy.</li>
+      <li><strong>Q8 · Admin:</strong> một tài khoản duy nhất, tên đăng nhập và mật khẩu khai báo khi cài đặt (biến môi trường), không có trang quản lý tài khoản.</li>
+    </ul>
+  </div>
+
+  <h3 id="f-19">F-19 · Đăng ký người chơi <span class="badge must">Bắt buộc</span></h3>
+  <p>Trước lượt chơi đầu tiên trên một máy, người chơi phải điền form Đăng ký (S-07): <strong>họ tên, email, số điện thoại</strong> và tick ô đồng ý (F-23). Quy tắc kiểm tra tại <a href="04-quy-tac-du-lieu.html#r-17">R-17 → R-19</a>.</p>
+  <ul class="check-list">
+    <li>Bấm <strong>Bắt đầu</strong> khi máy chưa có người chơi → mở S-07 thay vì đếm ngược.</li>
+    <li>Kiểm tra từng ô ngay khi rời ô và khi bấm gửi; lỗi hiện ngay dưới ô, focus chuyển tới ô lỗi đầu tiên.</li>
+    <li>Gửi thành công → lưu người chơi trên máy (F-21) và <strong>vào thẳng đếm ngược</strong> (S-02), không phải bấm Bắt đầu lần nữa.</li>
+    <li>Trong lúc gửi: nút chuyển “Đang lưu…” và bị khoá để tránh gửi hai lần.</li>
+    <li>Máy chủ không phản hồi hoặc lỗi → giữ nguyên dữ liệu đã nhập, hiện “Không kết nối được máy chủ. Vui lòng thử lại.” và <strong>không cho chơi</strong> cho tới khi đăng ký được.</li>
+    <li>Máy chủ kiểm tra lại toàn bộ dữ liệu; không tin dữ liệu từ trình duyệt.</li>
+  </ul>
+
+  <h3 id="f-20">F-20 · Nhận lại người chơi theo email <span class="badge must">Bắt buộc</span></h3>
+  <p>Email (sau chuẩn hoá, R-18) là khoá nhận diện người chơi. Đăng ký bằng email đã có trong database → <strong>không tạo người chơi mới</strong>; cập nhật họ tên, số điện thoại, thời điểm đồng ý theo lần nhập mới nhất.</p>
+  <ul class="check-list">
+    <li>Lịch sử điểm cũ của email đó được giữ nguyên và nối tiếp.</li>
+    <li>Màn hình không cho biết email đã tồn tại hay chưa (cùng một thông báo thành công), để người khác không dò được ai đã đăng ký.</li>
+  </ul>
+  <div class="callout danger">
+    <span class="title">Rủi ro đã chấp nhận</span>
+    <p>Vì nhập lại email là nhận lại người chơi, ai biết email của người khác có thể sửa họ tên / số điện thoại và ghi điểm dưới tên người đó. Không có xác minh email ở phiên bản này. Admin xem được thời điểm cập nhật gần nhất (F-26) để phát hiện bất thường.</p>
+  </div>
+
+  <h3 id="f-21">F-21 · Ghi nhớ người chơi trên máy, đổi người chơi <span class="badge must">Bắt buộc</span></h3>
+  <ul class="check-list">
+    <li>Đăng ký thành công → trình duyệt lưu mã người chơi do máy chủ cấp (R-24). Các lần mở sau không hỏi lại.</li>
+    <li>S-01 hiện “Xin chào, <em>tên gọi</em>!” (tên gọi = từ cuối của họ tên) và liên kết <strong>“Không phải bạn?”</strong>.</li>
+    <li>Bấm “Không phải bạn?” → xoá người chơi khỏi máy này (không xoá trên máy chủ, không xoá Top 5) và mở S-07 trống.</li>
+    <li>Ô tên Top 5 (F-13) điền sẵn tên gọi nếu chưa có tên dùng lần trước; vẫn theo giới hạn 12 ký tự.</li>
+    <li>Nếu máy chủ báo mã người chơi không còn hợp lệ (ví dụ admin đã xoá) → xoá khỏi máy và mở lại S-07 ở lần bấm Bắt đầu tiếp theo.</li>
+  </ul>
+
+  <h3 id="f-22">F-22 · Gửi điểm lên máy chủ <span class="badge must">Bắt buộc</span></h3>
+  <p>Khi lượt kết thúc (F-12), trình duyệt gửi kết quả lượt lên máy chủ: điểm, số chuột trúng, số bom đập phải, số chuột bỏ lỡ, thời điểm kết thúc và mã lượt.</p>
+  <ul class="check-list">
+    <li>Gửi ngầm, không làm chậm màn hình Kết quả; người chơi không phải chờ.</li>
+    <li>Gửi lỗi → xếp vào hàng chờ trên máy và gửi lại ở lần mở trang hoặc lượt kết thúc tiếp theo (R-25). Gửi lại nhiều lần không tạo bản ghi trùng.</li>
+    <li>Không gửi khi chơi ở chế độ <code>?debug=1</code> hoặc khi lượt bị huỷ bằng Thoát (F-11).</li>
+    <li>Máy chủ từ chối dữ liệu vô lý (R-23) và không báo lỗi cho người chơi.</li>
+  </ul>
+
+  <h3 id="f-23">F-23 · Đồng ý xử lý dữ liệu cá nhân <span class="badge must">Bắt buộc</span></h3>
+  <p>Form Đăng ký có đoạn thông báo ngắn và ô tick bắt buộc (không tick sẵn):</p>
+  <div class="callout">
+    <p>☐ Tôi đồng ý để ban tổ chức lưu họ tên, email, số điện thoại và điểm chơi của tôi nhằm quản lý người chơi. Tôi có thể yêu cầu xoá dữ liệu bất kỳ lúc nào.</p>
+  </div>
+  <ul class="check-list">
+    <li>Chưa tick → không gửi được, hiện lỗi “Vui lòng đồng ý để tiếp tục”.</li>
+    <li>Máy chủ lưu thời điểm đồng ý (<code>consented_at</code>) cho mỗi lần đăng ký / nhận lại.</li>
+    <li>Nội dung thông báo cần được bộ phận phụ trách pháp lý duyệt trước khi phát hành (dữ liệu cá nhân thuộc phạm vi Nghị định 13/2023/NĐ-CP).</li>
+  </ul>
+
+  <h2 id="admin">9. Trang quản trị <span class="badge new">Mới</span></h2>
+  <p>Trang quản trị nằm ở địa chỉ <code>/admin</code>, tách khỏi game; người chơi không thấy liên kết tới trang này.</p>
+
+  <h3 id="f-24">F-24 · Đăng nhập admin <span class="badge must">Bắt buộc</span></h3>
+  <p>Một tài khoản admin duy nhất; tên đăng nhập và mật khẩu đặt qua biến môi trường khi cài đặt (R-26).</p>
+  <ul class="check-list">
+    <li>Mọi địa chỉ dưới <code>/admin</code> và mọi API quản trị đều yêu cầu đăng nhập; chưa đăng nhập → chuyển về S-08 (trang) hoặc trả lỗi 401 (API).</li>
+    <li>Sai tên hoặc mật khẩu → một thông báo chung “Sai tên đăng nhập hoặc mật khẩu” (không nói sai phần nào).</li>
+    <li>Đăng nhập đúng → vào S-09.</li>
+    <li>Máy chủ không khởi động nếu thiếu tên đăng nhập / mật khẩu admin hoặc mật khẩu ngắn hơn 12 ký tự.</li>
+  </ul>
+
+  <h3 id="f-25">F-25 · Đăng xuất và hết phiên <span class="badge must">Bắt buộc</span></h3>
+  <ul class="check-list">
+    <li>Nút <strong>Đăng xuất</strong> trên S-09 → huỷ phiên trên máy chủ, về S-08.</li>
+    <li>Phiên hết hạn sau 8 giờ kể từ lúc đăng nhập, hoặc 30 phút không thao tác (R-27).</li>
+    <li>Phiên hết hạn giữa chừng → thao tác tiếp theo đưa về S-08 kèm thông báo “Phiên đăng nhập đã hết, vui lòng đăng nhập lại”.</li>
+  </ul>
+
+  <h3 id="f-26">F-26 · Danh sách người chơi <span class="badge must">Bắt buộc</span></h3>
+  <p>Bảng người chơi với các cột: họ tên, email, số điện thoại, ngày đăng ký, cập nhật gần nhất, số lượt chơi, điểm cao nhất, lần chơi gần nhất.</p>
+  <ul class="check-list">
+    <li>Mặc định sắp xếp người đăng ký mới nhất lên đầu; bấm tiêu đề cột để sắp xếp theo cột đó (tăng / giảm).</li>
+    <li>Phân trang 20 dòng / trang; hiện tổng số người chơi khớp với điều kiện tìm kiếm.</li>
+    <li>Không có dữ liệu → “Chưa có người chơi nào đăng ký.”</li>
+  </ul>
+
+  <h3 id="f-27">F-27 · Tìm kiếm người chơi <span class="badge must">Bắt buộc</span></h3>
+  <p>Một ô tìm kiếm chung, tìm trong họ tên, email và số điện thoại (R-28).</p>
+  <ul class="check-list">
+    <li>Tìm khi gõ (chờ 300 ms sau phím cuối) và khi nhấn <kbd>Enter</kbd>; có nút xoá nhanh nội dung tìm.</li>
+    <li>Không phân biệt hoa / thường và có dấu / không dấu: gõ “nguyen” tìm thấy “Nguyễn”.</li>
+    <li>Không có kết quả → “Không tìm thấy người chơi phù hợp.”</li>
+    <li>Từ khoá tìm được giữ trên địa chỉ trang (<code>?q=</code>) để tải lại vẫn còn.</li>
+  </ul>
+
+  <h3 id="f-28">F-28 · Xoá người chơi <span class="badge must">Bắt buộc</span></h3>
+  <ul class="check-list">
+    <li>Mỗi dòng có nút <strong>Xoá</strong> → hộp xác nhận S-10 ghi rõ họ tên và email người sẽ bị xoá.</li>
+    <li>Xác nhận → xoá vĩnh viễn người chơi và <strong>toàn bộ điểm</strong> của người đó trên máy chủ (R-29). Không có thùng rác, không khôi phục được.</li>
+    <li>Xoá xong: dòng biến mất, hiện thông báo “Đã xoá &lt;họ tên&gt;”, tổng số giảm 1.</li>
+    <li>Huỷ → không thay đổi gì.</li>
+  </ul>
+
+  <h3 id="f-29">F-29 · Xuất danh sách ra CSV <span class="badge must">Bắt buộc</span></h3>
+  <ul class="check-list">
+    <li>Nút <strong>Xuất CSV</strong> tải về file chứa <strong>toàn bộ kết quả tìm kiếm hiện tại</strong> (mọi trang, không chỉ trang đang xem); không tìm kiếm → toàn bộ người chơi.</li>
+    <li>Định dạng file theo <a href="04-quy-tac-du-lieu.html#csv">R-30</a>; mở bằng Excel và Google Sheets hiển thị đúng tiếng Việt.</li>
+    <li>Tên file: <code>dap-chuot-nguoi-choi-YYYYMMDD-HHmm.csv</code> theo giờ máy chủ.</li>
+  </ul>
+
+  <h3 id="f-30">F-30 · Chống lạm dụng <span class="badge should">Nên có</span></h3>
+  <ul class="check-list">
+    <li>Đăng nhập admin sai 5 lần trong 15 phút từ cùng một địa chỉ IP → khoá đăng nhập từ IP đó 15 phút, thông báo “Thử lại sau 15 phút”.</li>
+    <li>Đăng ký: tối đa 10 lần / giờ / địa chỉ IP. Gửi điểm: tối đa 120 lần / giờ / người chơi.</li>
+    <li>Vượt giới hạn → máy chủ trả lỗi 429; game hiện “Bạn thao tác quá nhanh, vui lòng thử lại sau.”</li>
+  </ul>
+
+  <h3 id="f-31">F-31 · Nhật ký thao tác admin <span class="badge should">Nên có</span></h3>
+  <p>Máy chủ ghi log mỗi lần đăng nhập (thành công / thất bại), đăng xuất, xoá người chơi và xuất CSV: thời điểm, địa chỉ IP, thao tác, mã người chơi bị xoá, số dòng xuất. Log <strong>không</strong> chứa họ tên, email, số điện thoại hay mật khẩu.</p>
 
   <div class="pager">
     <a class="btn" href="01-tong-quan.html">← 1. Tổng quan</a>

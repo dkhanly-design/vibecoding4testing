@@ -23,6 +23,7 @@
   <p class="eyebrow">Tài liệu 01</p>
   <h1>Tổng quan</h1>
   <p>Mục tiêu, người chơi, phạm vi và các quyết định đã chốt cho phiên bản đầu tiên.</p>
+  <p class="meta-line">Bổ sung 17/11/2026: mở rộng phạm vi cho đăng ký người chơi &amp; trang quản trị (mục 10)</p>
 </section>
 
 <main>
@@ -38,6 +39,7 @@
       <li><a href="#pham-vi">Phạm vi</a></li>
       <li><a href="#rang-buoc">Ràng buộc kỹ thuật</a></li>
       <li><a href="#thuat-ngu">Thuật ngữ</a></li>
+      <li><a href="#mo-rong">Mở rộng: đăng ký &amp; quản trị <span class="badge new">Mới</span></a></li>
     </ol>
   </nav>
 
@@ -76,6 +78,9 @@
     <tr><td class="id">Q3</td><td>Yếu tố trừ điểm</td><td>Có bom: đập trúng bom −1 điểm, điểm không âm</td><td><a href="04-quy-tac-du-lieu.html#bom">04 · Bom</a></td></tr>
     <tr><td class="id">Q4</td><td>Lưu điểm</td><td>Top 5 có tên, lưu trong trình duyệt của máy đang chơi</td><td><a href="04-quy-tac-du-lieu.html#luu-tru">04 · Lưu trữ</a></td></tr>
     <tr><td class="id">Q5</td><td>Hình ảnh &amp; âm thanh</td><td>Emoji 🐭 💣, có âm thanh và nút bật/tắt tiếng</td><td><a href="02-chuc-nang.html#am-thanh">02 · Âm thanh</a></td></tr>
+    <tr><td class="id">Q6</td><td>Đăng ký người chơi <span class="badge new">Mới</span></td><td>Một lần trên mỗi máy; email đã có thì nhận lại người chơi và cập nhật họ tên, SĐT</td><td><a href="02-chuc-nang.html#f-19">02 · F-19, F-20</a></td></tr>
+    <tr><td class="id">Q7</td><td>Lưu điểm <span class="badge new">Mới</span></td><td>Mỗi lượt gửi điểm lên máy chủ; Top 5 vẫn lưu trên máy</td><td><a href="02-chuc-nang.html#f-22">02 · F-22</a></td></tr>
+    <tr><td class="id">Q8</td><td>Tài khoản admin <span class="badge new">Mới</span></td><td>Một tài khoản, khai báo bằng biến môi trường khi cài đặt</td><td><a href="02-chuc-nang.html#f-24">02 · F-24</a></td></tr>
   </table></div>
 
   <h2 id="thay-doi">6. Thay đổi so với YEU-CAU.md</h2>
@@ -106,7 +111,7 @@
   </ul>
   <h3>Ngoài phạm vi</h3>
   <ul>
-    <li>Đăng nhập, tài khoản, bảng xếp hạng online, nhiều người chơi.</li>
+    <li>Đăng nhập, tài khoản, bảng xếp hạng online, nhiều người chơi. <a class="badge new" href="#mo-rong">Đã thay đổi · xem mục 10</a></li>
     <li>Lựa chọn mức độ khó, chế độ chơi khác, vật phẩm thưởng.</li>
     <li>Hình vẽ riêng cho chuột / hang (dùng emoji và CSS).</li>
     <li>Ngôn ngữ khác ngoài tiếng Việt.</li>
@@ -114,10 +119,10 @@
 
   <h2 id="rang-buoc">8. Ràng buộc kỹ thuật</h2>
   <ul>
-    <li>Trang web tĩnh: HTML + CSS + JavaScript thuần, không thư viện ngoài, không máy chủ.</li>
+    <li>Trang web tĩnh: HTML + CSS + JavaScript thuần, không thư viện ngoài, không máy chủ. <a class="badge new" href="#mo-rong">Đã thay đổi · xem mục 10</a></li>
     <li>Trình duyệt hỗ trợ: Chrome, Edge, Firefox, Safari (macOS và iOS) — 2 phiên bản mới nhất.</li>
     <li>Dùng token trong <code>design/tokens.css</code> cho màu, chữ, khoảng cách, bo góc.</li>
-    <li>Hoạt động khi không có mạng sau lần tải đầu (font dự phòng có sẵn trong máy).</li>
+    <li>Hoạt động khi không có mạng sau lần tải đầu (font dự phòng có sẵn trong máy). <a class="badge new" href="#mo-rong">Đã thay đổi · xem mục 10</a></li>
   </ul>
 
   <h2 id="thuat-ngu">9. Thuật ngữ</h2>
@@ -130,6 +135,74 @@
     <tr><td>Khoảng nghỉ</td><td>Khoảng thời gian lưới trống giữa hai vật thể.</td></tr>
     <tr><td>Pha</td><td>Một đoạn 10 giây trong lượt, mỗi pha có tốc độ và tỉ lệ bom riêng.</td></tr>
     <tr><td>Top 5</td><td>5 kết quả điểm cao nhất kèm tên, lưu trong trình duyệt.</td></tr>
+  </table></div>
+
+  <!-- ===================== BỔ SUNG: MỞ RỘNG PHẠM VI ===================== -->
+  <h2 id="mo-rong">10. Mở rộng: đăng ký &amp; quản trị <span class="badge new">Mới</span></h2>
+  <div class="callout warn">
+    <span class="title">Mục này thay thế một phần mục 7 và mục 8</span>
+    <p>Bản đầu (đã phát hành, commit <code>1308abd</code>) chạy hoàn toàn trên trình duyệt. Tính năng đăng ký người chơi cần <strong>máy chủ và database</strong>. Các dòng sau ở mục 7 và 8 <strong>không còn đúng</strong> kể từ phiên bản có đăng ký:</p>
+    <ul>
+      <li>Mục 7 · Ngoài phạm vi: “Đăng nhập, tài khoản” → nay có tài khoản <strong>admin</strong> (người chơi vẫn không có tài khoản / mật khẩu).</li>
+      <li>Mục 8 · Ràng buộc: “không máy chủ” và “hoạt động khi không có mạng” → nay cần máy chủ Node.js + PostgreSQL; người chơi cần mạng ở lần đăng ký đầu tiên.</li>
+    </ul>
+    <p>Các phần còn lại của mục 7 và 8 giữ nguyên.</p>
+  </div>
+
+  <h3>Mục tiêu bổ sung</h3>
+  <ul>
+    <li><strong>Ban tổ chức:</strong> biết ai đã chơi (họ tên, email, số điện thoại), mỗi người chơi bao nhiêu lượt và điểm cao nhất; xuất được danh sách ra Excel.</li>
+    <li><strong>Người chơi:</strong> chỉ điền thông tin một lần trên mỗi máy, lần sau vào chơi ngay.</li>
+  </ul>
+
+  <h3>Người dùng mới</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Nhóm</th><th>Thiết bị</th><th>Việc cần làm</th></tr>
+    <tr><td>Admin (ban tổ chức)</td><td>Máy tính là chính; điện thoại dùng được</td><td>Đăng nhập trang <code>/admin</code>, xem, tìm, xoá, xuất CSV danh sách người chơi</td></tr>
+  </table></div>
+
+  <h3>Vòng chơi khi có đăng ký</h3>
+  <ol>
+    <li>Mở trang → S-01. Máy chưa đăng ký → bấm <strong>Bắt đầu</strong> sẽ mở form Đăng ký (S-07).</li>
+    <li>Điền họ tên, email, số điện thoại, tick đồng ý → <strong>Đăng ký &amp; chơi</strong> → đếm ngược.</li>
+    <li>Chơi như cũ. Hết giờ → điểm được gửi ngầm lên máy chủ; Top 5 trên máy như cũ.</li>
+    <li>Lần sau trên cùng máy: S-01 chào theo tên, bấm Bắt đầu là chơi ngay.</li>
+  </ol>
+
+  <h3>Phạm vi bổ sung</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Trong phạm vi</th><th>Ngoài phạm vi</th></tr>
+    <tr>
+      <td><ul>
+        <li>Form đăng ký (họ tên, email, SĐT, đồng ý lưu dữ liệu)</li>
+        <li>Lưu người chơi và điểm từng lượt vào PostgreSQL</li>
+        <li>Trang admin: đăng nhập, xem, tìm kiếm, xoá, xuất CSV</li>
+        <li>Giới hạn số lần thử, nhật ký thao tác admin</li>
+      </ul></td>
+      <td><ul>
+        <li>Xác minh email / số điện thoại (gửi mã)</li>
+        <li>Tài khoản, mật khẩu cho người chơi</li>
+        <li>Nhiều tài khoản admin, phân quyền</li>
+        <li>Bảng xếp hạng online chung</li>
+        <li>Sửa thông tin người chơi từ trang admin</li>
+      </ul></td>
+    </tr>
+  </table></div>
+
+  <h3>Ràng buộc kỹ thuật bổ sung</h3>
+  <ul>
+    <li>Máy chủ Node.js (mở rộng từ <code>server.js</code> hiện có) và PostgreSQL 17, chạy chung bằng Docker Compose.</li>
+    <li>Thông tin bí mật (mật khẩu admin, mật khẩu database) chỉ nằm trong file <code>.env</code>, không commit lên Git.</li>
+    <li>Dữ liệu cá nhân: có ô đồng ý, xoá được theo yêu cầu, không ghi thông tin cá nhân vào log (Nghị định 13/2023/NĐ-CP).</li>
+  </ul>
+
+  <h3>Thuật ngữ bổ sung</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Thuật ngữ</th><th>Nghĩa</th></tr>
+    <tr><td>Người chơi (đã đăng ký)</td><td>Một bản ghi trong database, nhận diện bằng email.</td></tr>
+    <tr><td>Mã người chơi</td><td>Chuỗi ngẫu nhiên máy chủ cấp cho một máy sau khi đăng ký, dùng để gửi điểm; không chứa thông tin cá nhân.</td></tr>
+    <tr><td>Tên gọi</td><td>Từ cuối của họ tên (ví dụ “An”), dùng để chào và điền sẵn tên Top 5.</td></tr>
+    <tr><td>Admin</td><td>Người của ban tổ chức, đăng nhập trang <code>/admin</code>.</td></tr>
   </table></div>
 
   <div class="pager">

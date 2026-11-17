@@ -24,6 +24,7 @@
   <h1>Mini game Đập Chuột</h1>
   <p>Game trên trình duyệt: lưới 3×3, mỗi lượt 30 giây, chuột xuất hiện nhanh dần, có bom gây trừ điểm và bảng 5 điểm cao nhất lưu trên máy.</p>
   <p class="meta-line">Phiên bản 1.0 · 13/11/2026 · Trạng thái: chờ duyệt, chưa viết code</p>
+  <p class="meta-line">Bổ sung 17/11/2026 · Đăng ký người chơi &amp; trang quản trị · Trạng thái: chờ duyệt, chưa viết code</p>
 </section>
 
 <main>
@@ -33,6 +34,8 @@
     <div class="card stat"><div class="value">30s</div><div class="caption">Mỗi lượt, 3 pha tăng tốc</div></div>
     <div class="card stat"><div class="value">+1 / −1</div><div class="caption">Đập chuột / Đập bom</div></div>
     <div class="card stat"><div class="value">Top 5</div><div class="caption">Bảng điểm có tên, lưu trên máy</div></div>
+    <div class="card stat"><div class="value">1 lần</div><div class="caption">Đăng ký mỗi máy: họ tên, email, SĐT <span class="badge new">Mới</span></div></div>
+    <div class="card stat"><div class="value">/admin</div><div class="caption">Xem, tìm, xoá, xuất CSV <span class="badge new">Mới</span></div></div>
   </div>
 
   <h2>Mục lục</h2>
@@ -67,6 +70,18 @@
       <h3>Tài liệu liên quan</h3>
       <p><a href="../YEU-CAU.md">YEU-CAU.md</a> — yêu cầu ban đầu<br><a href="../design/design-system.html">Design system</a> — màu, chữ, thành phần</p>
     </div>
+  </div>
+
+  <div class="callout warn">
+    <span class="title">Cập nhật 17/11/2026 · Đăng ký người chơi &amp; trang quản trị</span>
+    <p>Game cần thêm máy chủ và database (PostgreSQL). Phần mới được thêm vào cuối mỗi tài liệu, gắn nhãn <span class="badge new">Mới</span>; nội dung cũ giữ nguyên.</p>
+    <ul>
+      <li><a href="01-tong-quan.html#mo-rong">01 · Mở rộng phạm vi</a> — quyết định Q6 → Q8, phạm vi, ràng buộc mới</li>
+      <li><a href="02-chuc-nang.html#dang-ky">02 · Chức năng F-19 → F-31</a></li>
+      <li><a href="03-man-hinh.html#man-hinh-moi">03 · Màn hình S-07 → S-10</a></li>
+      <li><a href="04-quy-tac-du-lieu.html#quy-tac-dang-ky">04 · Quy tắc R-17 → R-31, database, API</a></li>
+      <li><a href="05-ke-hoach-test.html#pham-vi-moi">05 · Ca test TC-41 → TC-81</a></li>
+    </ul>
   </div>
 
   <div class="callout">

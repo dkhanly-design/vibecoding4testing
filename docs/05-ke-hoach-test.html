@@ -39,6 +39,12 @@
       <li><a href="#tc-giao-dien">Ca test: giao diện &amp; trợ năng</a></li>
       <li><a href="#hoan-thanh">Điều kiện hoàn thành</a></li>
       <li><a href="#bao-loi">Báo lỗi</a></li>
+      <li><a href="#pham-vi-moi">Phạm vi test bổ sung <span class="badge new">Mới</span></a></li>
+      <li><a href="#tc-dang-ky">Ca test: đăng ký <span class="badge new">Mới</span></a></li>
+      <li><a href="#tc-gui-diem">Ca test: gửi điểm <span class="badge new">Mới</span></a></li>
+      <li><a href="#tc-admin">Ca test: trang quản trị <span class="badge new">Mới</span></a></li>
+      <li><a href="#tc-bao-mat">Ca test: bảo mật &amp; dữ liệu <span class="badge new">Mới</span></a></li>
+      <li><a href="#hoan-thanh-moi">Điều kiện hoàn thành bổ sung <span class="badge new">Mới</span></a></li>
     </ol>
   </nav>
 
@@ -160,6 +166,89 @@
     <tr><td>Mức độ</td><td>Nghiêm trọng · Cao · Vừa · Thấp</td></tr>
     <tr><td>Ảnh / video</td><td>Đính kèm nếu có</td></tr>
   </table></div>
+
+  <!-- ===================== BỔ SUNG: ĐĂNG KÝ & QUẢN TRỊ ===================== -->
+  <h2 id="pham-vi-moi">11. Phạm vi test bổ sung <span class="badge new">Mới</span></h2>
+  <ul>
+    <li><strong>Trong phạm vi:</strong> F-19 → F-31, R-17 → R-31, màn hình S-07 → S-10, API ở 04 · mục 15, database PostgreSQL.</li>
+    <li><strong>Môi trường:</strong> chạy bằng <code>docker compose up -d --build</code> với file <code>.env</code> test (mật khẩu admin test, không dùng mật khẩu thật). Trước mỗi đợt test, xoá dữ liệu bằng <code>docker compose down -v</code>.</li>
+    <li><strong>Thiết bị:</strong> S-07 test trên toàn bộ thiết bị ở mục 2. Trang quản trị (S-08 → S-10) test bắt buộc trên Chrome và Safari máy tính; điện thoại ở mức “Có thể”.</li>
+    <li><strong>Test tự động (khuyến nghị):</strong> hàm chuẩn hoá và kiểm tra R-17 → R-19, R-23, tạo CSV (R-30), và gọi API bằng script cho các ca bảo mật.</li>
+    <li><strong>Dữ liệu test:</strong> chỉ dùng email dạng <code>…@example.com</code> và số điện thoại giả; không dùng dữ liệu người thật.</li>
+  </ul>
+
+  <h2 id="tc-dang-ky">12. Ca test: đăng ký <span class="badge new">Mới</span></h2>
+  <div class="table-wrap"><table>
+    <tr><th>Mã</th><th>Bước thực hiện</th><th>Kết quả mong đợi</th><th>Tham chiếu</th><th>Mức</th></tr>
+    <tr><td class="id">TC-41</td><td>Máy chưa đăng ký, bấm Bắt đầu</td><td>Mở S-07, không đếm ngược</td><td>F-19</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-42</td><td>Nhập đúng cả 3 ô, tick đồng ý, bấm “Đăng ký &amp; chơi”</td><td>Vào thẳng đếm ngược; database có 1 người chơi với dữ liệu đã chuẩn hoá và <code>consented_at</code></td><td>F-19, R-17 → R-20</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-43</td><td>Họ tên: trống; “A”; 51 ký tự; “An123”; “  Nguyễn   Văn  An ”; “O'Neil”</td><td>3 lỗi đầu và “An123” bị từ chối với đúng câu lỗi; “Nguyễn Văn An” và “O'Neil” hợp lệ</td><td>R-17</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-44</td><td>Email: “an@example”; “an@@x.vn”; “ An.Nguyen@Example.COM ”</td><td>2 email đầu bị từ chối; email cuối được lưu thành “an.nguyen@example.com”</td><td>R-18</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-45</td><td>SĐT: “12345”; “0201234567”; “+84 901-234-567”; “84901234567”; “0901.234.567”</td><td>2 số đầu bị từ chối; 3 số sau đều lưu thành “0901234567”</td><td>R-19</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-46</td><td>Không tick đồng ý, bấm gửi</td><td>Báo “Vui lòng đồng ý để tiếp tục”; không gửi lên máy chủ</td><td>F-23</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-47</td><td>Gửi thẳng tới API (bỏ qua giao diện) với dữ liệu sai từng trường và <code>consent: false</code></td><td>Máy chủ trả 422 kèm lỗi từng trường; không có bản ghi nào được tạo</td><td>F-19</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-48</td><td>Máy A đăng ký email X; máy B đăng ký lại email X (viết hoa khác) với họ tên, SĐT khác</td><td>Database vẫn 1 người chơi; họ tên, SĐT là bản mới; lịch sử điểm từ máy A còn nguyên; thông báo ở máy B giống đăng ký mới</td><td>F-20, R-21</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-49</td><td>Đăng ký xong, tải lại trang, đóng mở trình duyệt</td><td>Không hỏi đăng ký lại; S-01 hiện “Xin chào, &lt;tên gọi&gt;!” đúng R-22</td><td>F-21, R-22</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-50</td><td>Bấm “Không phải bạn?”</td><td>Mở S-07 trống; Top 5 trên máy còn nguyên; người chơi trên máy chủ không bị xoá</td><td>F-21</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-51</td><td>Tắt dịch vụ <code>app</code>, gửi form Đăng ký</td><td>Hiện lỗi kết nối, dữ liệu đã nhập còn nguyên, không vào chơi được; bật lại → gửi được</td><td>F-19</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-52</td><td>Bấm “Đăng ký &amp; chơi” 5 lần thật nhanh</td><td>Chỉ 1 yêu cầu được gửi; chỉ 1 lượt bắt đầu</td><td>F-19</td><td><span class="badge should">Vừa</span></td></tr>
+    <tr><td class="id">TC-53</td><td>Điện thoại: mở bàn phím ở từng ô S-07</td><td>Đúng loại bàn phím (email / số); ô và nút không bị bàn phím che; tự điền của trình duyệt hoạt động</td><td>03 · S-07</td><td><span class="badge should">Vừa</span></td></tr>
+  </table></div>
+
+  <h2 id="tc-gui-diem">13. Ca test: gửi điểm <span class="badge new">Mới</span></h2>
+  <div class="table-wrap"><table>
+    <tr><th>Mã</th><th>Bước thực hiện</th><th>Kết quả mong đợi</th><th>Tham chiếu</th><th>Mức</th></tr>
+    <tr><td class="id">TC-54</td><td>Chơi 3 lượt</td><td>Bảng <code>rounds</code> có 3 bản ghi đúng điểm, số trúng, bom, bỏ lỡ; S-09 hiện 3 lượt và đúng điểm cao nhất</td><td>F-22, F-26</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-55</td><td>Ngắt mạng, chơi 2 lượt, bật mạng, tải lại trang</td><td>2 lượt được gửi bù; không có bản ghi trùng; màn hình Kết quả không bị chậm khi mất mạng</td><td>F-22, R-25</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-56</td><td>Gửi cùng một <code>round_id</code> 3 lần qua API</td><td>Lần đầu 201, hai lần sau 200; chỉ 1 bản ghi</td><td>R-25</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-57</td><td>Gửi qua API: <code>score</code> &gt; <code>hits</code>; <code>score</code> âm; tổng vật thể 500; <code>ended_at</code> ở năm sau</td><td>Tất cả bị từ chối 422, không lưu</td><td>R-23</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-58</td><td>Gửi điểm không có mã / mã sai</td><td>401, không lưu</td><td>R-24</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-59</td><td>Chơi với <code>?debug=1</code>; chơi rồi Thoát giữa lượt</td><td>Không có lượt nào được gửi</td><td>F-22</td><td><span class="badge should">Vừa</span></td></tr>
+    <tr><td class="id">TC-60</td><td>Admin xoá người chơi đang mở game; người chơi chơi tiếp 1 lượt rồi bấm Bắt đầu</td><td>Lượt đó bị máy chủ trả 401; trình duyệt xoá người chơi khỏi máy; lần bấm Bắt đầu mở S-07</td><td>F-21, R-24a</td><td><span class="badge must">Cao</span></td></tr>
+  </table></div>
+
+  <h2 id="tc-admin">14. Ca test: trang quản trị <span class="badge new">Mới</span></h2>
+  <div class="table-wrap"><table>
+    <tr><th>Mã</th><th>Bước thực hiện</th><th>Kết quả mong đợi</th><th>Tham chiếu</th><th>Mức</th></tr>
+    <tr><td class="id">TC-61</td><td>Mở <code>/admin</code> khi chưa đăng nhập; gọi thẳng các API quản trị</td><td>Trang chuyển về S-08; API trả 401, không lộ dữ liệu</td><td>F-24</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-62</td><td>Đăng nhập sai tên; sai mật khẩu; đúng cả hai</td><td>Hai lần sai cùng một câu thông báo; lần đúng vào S-09</td><td>F-24</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-63</td><td>Khởi động máy chủ thiếu <code>ADMIN_PASSWORD</code> hoặc mật khẩu 8 ký tự</td><td>Máy chủ không chạy; log ghi rõ lý do</td><td>R-26</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-64</td><td>Đăng xuất rồi bấm nút Back của trình duyệt; để yên 31 phút rồi thao tác</td><td>Không xem được dữ liệu cũ; về S-08 với thông báo hết phiên</td><td>F-25, R-27</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-65</td><td>Tạo 45 người chơi; xem danh sách, chuyển trang, sắp xếp từng cột</td><td>3 trang (20 / 20 / 5); tổng số đúng; sắp xếp đúng theo cột và chiều</td><td>F-26</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-66</td><td>Tìm “nguyen”, “NGUYỄN”, “example.com”, “0901 234”, “zzz”</td><td>Ba từ khoá đầu đều tìm thấy “Nguyễn…” / theo email / theo SĐT; “zzz” hiện “Không tìm thấy…”; tải lại trang vẫn giữ từ khoá</td><td>F-27, R-28</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-67</td><td>Bấm Xoá một người → Huỷ; rồi Xoá → Xoá vĩnh viễn</td><td>Huỷ: không đổi. Xoá: dòng biến mất, tổng giảm 1, database không còn người chơi, lượt chơi và mã thiết bị của người đó</td><td>F-28, R-29</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-68</td><td>Tìm “nguyen” (kết quả 25 người, 2 trang) rồi Xuất CSV</td><td>File có đúng 25 dòng dữ liệu + 1 dòng tiêu đề, đúng thứ tự đang xem, đúng tên file</td><td>F-29, R-30</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-69</td><td>Mở file CSV bằng Excel (Windows, macOS) và Google Sheets</td><td>Tiếng Việt hiện đúng; số điện thoại giữ số 0 đầu; ngày giờ đúng giờ Việt Nam</td><td>R-30</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-70</td><td>Đăng ký người chơi có họ tên chứa dấu phẩy / ngoặc kép (qua API), và một người có email bắt đầu bằng <code>=</code>; xuất CSV</td><td>Cột không bị lệch; ô bắt đầu bằng <code>=</code> có <code>'</code> phía trước, Excel không chạy công thức</td><td>R-30</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-71</td><td>Đăng nhập admin sai 6 lần liên tiếp</td><td>Từ lần thứ 6 báo “Thử lại sau 15 phút”, kể cả khi nhập đúng</td><td>F-30</td><td><span class="badge should">Vừa</span></td></tr>
+    <tr><td class="id">TC-72</td><td>Dùng bàn phím trên S-10: <kbd>Tab</kbd>, <kbd>Esc</kbd></td><td>Focus mặc định ở Huỷ; Esc đóng hộp, không xoá</td><td>03 · S-10</td><td><span class="badge should">Vừa</span></td></tr>
+    <tr><td class="id">TC-73</td><td>Đăng nhập, xoá 1 người, xuất CSV, đăng xuất; đọc log máy chủ</td><td>Có đủ 4 dòng log thao tác; không có họ tên, email, SĐT, mật khẩu trong log</td><td>F-31</td><td><span class="badge should">Vừa</span></td></tr>
+  </table></div>
+
+  <h2 id="tc-bao-mat">15. Ca test: bảo mật &amp; dữ liệu <span class="badge new">Mới</span></h2>
+  <div class="table-wrap"><table>
+    <tr><th>Mã</th><th>Bước thực hiện</th><th>Kết quả mong đợi</th><th>Tham chiếu</th><th>Mức</th></tr>
+    <tr><td class="id">TC-74</td><td>Đăng ký họ tên / email có <code>&lt;script&gt;</code>, <code>' OR 1=1 --</code> (qua API); mở S-09</td><td>Dữ liệu sai quy tắc bị từ chối; không có lệnh nào chạy; database không bị ảnh hưởng</td><td>R-17, R-18</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-75</td><td>Gửi yêu cầu xoá người chơi từ một trang web khác (khác <code>Origin</code>) trong lúc admin đang đăng nhập</td><td>Bị từ chối 403, không xoá</td><td>R-27</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-76</td><td>Xem cookie sau khi đăng nhập qua link HTTPS (ngrok)</td><td><code>dc_admin</code> có <code>HttpOnly</code>, <code>SameSite=Strict</code>, <code>Secure</code></td><td>R-27</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-77</td><td>Xem Local Storage của trình duyệt sau khi đăng ký</td><td>Chỉ có mã người chơi và tên gọi; không có email, số điện thoại</td><td>04 · mục 12</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-78</td><td>Từ máy khác trong mạng, thử kết nối cổng PostgreSQL 5432 của máy chạy Docker</td><td>Không kết nối được</td><td>04 · mục 14</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-79</td><td><code>docker compose down</code> rồi <code>up</code> lại</td><td>Người chơi và điểm còn nguyên (volume); admin phải đăng nhập lại</td><td>04 · mục 14, R-27</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-80</td><td>Kiểm tra kho Git</td><td>Không có file <code>.env</code> thật; có <code>.env.example</code> không chứa mật khẩu thật</td><td>04 · mục 16</td><td><span class="badge must">Cao</span></td></tr>
+    <tr><td class="id">TC-81</td><td>Gửi 11 yêu cầu đăng ký trong 1 giờ từ cùng một IP</td><td>Yêu cầu thứ 11 nhận 429 và thông báo “Bạn thao tác quá nhanh…”</td><td>F-30</td><td><span class="badge should">Vừa</span></td></tr>
+  </table></div>
+
+  <h2 id="hoan-thanh-moi">16. Điều kiện hoàn thành bổ sung <span class="badge new">Mới</span></h2>
+  <div class="callout ok">
+    <span class="title">Tính năng đăng ký &amp; quản trị được phát hành khi:</span>
+    <ul class="check-list">
+      <li>100% ca test mức <strong>Cao</strong> từ TC-41 đến TC-81 đạt, cùng các điều kiện ở mục 9 vẫn giữ nguyên.</li>
+      <li>Toàn bộ ca test bảo mật (TC-74 → TC-80) đạt — không có ngoại lệ.</li>
+      <li>Nội dung thông báo đồng ý (F-23) đã được người phụ trách pháp lý duyệt.</li>
+      <li>Đã thử sao lưu và khôi phục database ít nhất một lần.</li>
+      <li>README có hướng dẫn tạo file <code>.env</code>, đổi mật khẩu admin và sao lưu dữ liệu.</li>
+    </ul>
+  </div>
 
   <div class="pager">
     <a class="btn" href="04-quy-tac-du-lieu.html">← 4. Quy tắc &amp; dữ liệu</a>

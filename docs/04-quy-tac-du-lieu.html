@@ -39,6 +39,12 @@
       <li><a href="#luu-tru">Dữ liệu lưu trữ</a></li>
       <li><a href="#loi">Xử lý dữ liệu lỗi</a></li>
       <li><a href="#cau-hinh">Bảng cấu hình</a></li>
+      <li><a href="#quy-tac-dang-ky">Quy tắc đăng ký <span class="badge new">Mới</span></a></li>
+      <li><a href="#quy-tac-diem">Gửi điểm &amp; mã người chơi <span class="badge new">Mới</span></a></li>
+      <li><a href="#quy-tac-admin">Quy tắc quản trị <span class="badge new">Mới</span></a></li>
+      <li><a href="#database">Database <span class="badge new">Mới</span></a></li>
+      <li><a href="#api">API máy chủ <span class="badge new">Mới</span></a></li>
+      <li><a href="#trien-khai">Cấu hình triển khai <span class="badge new">Mới</span></a></li>
     </ol>
   </nav>
 
@@ -177,6 +183,133 @@ PHASES = [
   { from: 10, showMs: 700, gapMs: [300, 550], bombRate: 0.15 },
   { from: 20, showMs: 550, gapMs: [200, 400], bombRate: 0.20 },
 ]</code></pre>
+
+  <!-- ===================== BỔ SUNG: ĐĂNG KÝ, ĐIỂM, QUẢN TRỊ, DATABASE ===================== -->
+  <h2 id="quy-tac-dang-ky">11. Quy tắc đăng ký <span class="badge new">Mới</span></h2>
+  <p>Trình duyệt và máy chủ cùng áp dụng các quy tắc dưới đây; <strong>máy chủ là nơi quyết định cuối cùng</strong>. Mọi chuỗi được chuẩn hoá Unicode NFC trước khi kiểm tra.</p>
+  <div class="table-wrap"><table>
+    <tr><th>Mã</th><th>Trường</th><th>Chuẩn hoá</th><th>Hợp lệ khi</th><th>Ví dụ</th></tr>
+    <tr id="r-17"><td class="id">R-17</td><td>Họ và tên</td><td>Bỏ khoảng trắng đầu/cuối, gộp khoảng trắng liền nhau</td><td>2–50 ký tự hiển thị; chỉ gồm chữ cái (mọi ngôn ngữ, có dấu), khoảng trắng, dấu <code>'</code> <code>-</code> <code>.</code>; có ít nhất 1 chữ cái</td><td>✅ “Nguyễn Văn An”, “O'Neil” · ❌ “A”, “An123”, “&lt;b&gt;”</td></tr>
+    <tr id="r-18"><td class="id">R-18</td><td>Email</td><td>Bỏ khoảng trắng đầu/cuối, chuyển toàn bộ sang chữ thường</td><td>Tối đa 254 ký tự; đúng một <code>@</code>; phần trước <code>@</code> 1–64 ký tự, chỉ gồm chữ không dấu, số và <code>. _ % + - = '</code>, không bắt đầu / kết thúc bằng dấu chấm; tên miền chỉ gồm chữ không dấu, số, <code>-</code>, <code>.</code>, có ít nhất một dấu chấm, đuôi ≥ 2 chữ cái</td><td>✅ “An.Nguyen@Example.com” → “an.nguyen@example.com” · ❌ “an@example”, “an@@x.vn”</td></tr>
+    <tr id="r-19"><td class="id">R-19</td><td>Số điện thoại</td><td>Bỏ khoảng trắng, <code>.</code>, <code>-</code>, <code>(</code>, <code>)</code>; <code>+84</code> hoặc <code>84</code> ở đầu (11 chữ số) đổi thành <code>0</code></td><td>Số di động Việt Nam: đúng 10 chữ số, dạng <code>0[3|5|7|8|9]xxxxxxxx</code>. Lưu ở dạng đã chuẩn hoá <code>0xxxxxxxxx</code>; hiển thị nhóm <code>0901 234 567</code></td><td>✅ “+84 901-234-567” → “0901234567” · ❌ “12345”, “0201234567”</td></tr>
+    <tr><td class="id">R-20</td><td>Đồng ý</td><td>—</td><td>Bắt buộc tick; máy chủ ghi <code>consented_at</code> = thời điểm nhận yêu cầu</td><td>—</td></tr>
+  </table></div>
+  <ul>
+    <li><strong>R-21 — Nhận lại theo email:</strong> email (đã chuẩn hoá) là duy nhất trong database. Đăng ký với email đã có → cập nhật <code>full_name</code>, <code>phone</code>, <code>consented_at</code>, <code>updated_at</code>; giữ nguyên <code>id</code>, <code>created_at</code> và lịch sử điểm. Phản hồi cho trình duyệt giống hệt trường hợp tạo mới.</li>
+    <li><strong>R-21a:</strong> số điện thoại <strong>không</strong> bắt buộc duy nhất (nhiều người có thể dùng chung một số, ví dụ phụ huynh và con).</li>
+    <li><strong>R-22 — Tên gọi:</strong> từ cuối cùng của họ tên, cắt còn tối đa 12 ký tự hiển thị. Ví dụ “Nguyễn Văn An” → “An”. Dùng cho lời chào ở S-01 và điền sẵn tên Top 5 (F-21).</li>
+  </ul>
+
+  <h2 id="quy-tac-diem">12. Gửi điểm &amp; mã người chơi <span class="badge new">Mới</span></h2>
+  <ul>
+    <li><strong>R-23 — Kiểm tra điểm trên máy chủ:</strong> mọi số là số nguyên; <code>0 ≤ score ≤ hits</code>; <code>score ≥ hits − bombs_hit</code>; <code>hits + bombs_hit + missed ≤ 150</code> (giới hạn vật lý của 30 giây, xem R-04 → R-07b); <code>ended_at</code> không ở tương lai quá 5 phút và không cũ hơn 7 ngày. Sai bất kỳ điều kiện nào → máy chủ từ chối (422), không lưu.</li>
+    <li><strong>R-24 — Mã người chơi:</strong> khi đăng ký thành công, máy chủ cấp một mã ngẫu nhiên 32 byte (dạng base64url) cho <em>máy đó</em>. Máy chủ chỉ lưu bản băm SHA-256 của mã. Trình duyệt gửi mã trong header <code>Authorization: Bearer …</code> khi gửi điểm. Mã không chứa thông tin cá nhân.</li>
+    <li><strong>R-24a:</strong> một người chơi có thể có nhiều mã (nhiều máy). Đăng ký lại trên cùng máy cấp mã mới và bỏ mã cũ của máy đó. Xoá người chơi (R-29) làm mọi mã của người đó mất hiệu lực.</li>
+    <li><strong>R-25 — Hàng chờ gửi điểm:</strong> mỗi lượt có <code>round_id</code> (UUID v4) tạo trên trình duyệt. Gửi lỗi mạng / 5xx → giữ trong hàng chờ, tối đa 20 lượt (đầy thì bỏ lượt cũ nhất). Thử gửi lại khi tải trang và sau mỗi lượt. Máy chủ coi <code>(player_id, round_id)</code> là duy nhất nên gửi lại không tạo bản ghi trùng. Máy chủ trả 422 → bỏ lượt đó; trả 401 → bỏ cả hàng chờ và xoá người chơi khỏi máy (F-21).</li>
+  </ul>
+
+  <h3>Dữ liệu lưu thêm trên trình duyệt</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Khoá</th><th>Nội dung</th><th>Ghi chú</th></tr>
+    <tr><td><code>dapchuot.v1.player</code></td><td><code>{ "token": "…", "displayName": "An" }</code></td><td>Không lưu email, số điện thoại trên trình duyệt. Xoá khi bấm “Không phải bạn?” hoặc khi máy chủ trả 401</td></tr>
+    <tr><td><code>dapchuot.v1.pendingRounds</code></td><td>Mảng tối đa 20 lượt chờ gửi: <code>{ roundId, score, hits, bombsHit, missed, endedAt }</code></td><td>Dữ liệu hỏng → bỏ qua như R-15</td></tr>
+  </table></div>
+
+  <h2 id="quy-tac-admin">13. Quy tắc quản trị <span class="badge new">Mới</span></h2>
+  <ul>
+    <li><strong>R-26 — Tài khoản admin:</strong> đặt bằng biến môi trường <code>ADMIN_USERNAME</code> và <code>ADMIN_PASSWORD</code> trong file <code>.env</code> (không commit lên Git). Mật khẩu tối thiểu 12 ký tự; thiếu hoặc quá ngắn → máy chủ không khởi động và ghi rõ lý do vào log. So sánh mật khẩu bằng phép so sánh thời gian cố định. Đổi mật khẩu = sửa <code>.env</code> rồi khởi động lại; mọi phiên cũ mất hiệu lực.</li>
+    <li><strong>R-27 — Phiên đăng nhập:</strong> mã phiên ngẫu nhiên 32 byte, lưu trong cookie <code>dc_admin</code> với <code>HttpOnly</code>, <code>SameSite=Strict</code>, <code>Path=/</code>, và <code>Secure</code> khi chạy qua HTTPS (ví dụ link ngrok). Phiên lưu trong bộ nhớ máy chủ; hết hạn sau 8 giờ hoặc 30 phút không thao tác; khởi động lại máy chủ thì phải đăng nhập lại. Mọi yêu cầu thay đổi dữ liệu (xoá, đăng xuất) phải có header <code>Origin</code> trùng địa chỉ trang (chống CSRF).</li>
+    <li><strong>R-28 — Tìm kiếm:</strong> từ khoá bỏ khoảng trắng đầu/cuối, tối đa 100 ký tự. So khớp <em>chứa chuỗi</em> trên họ tên, email, số điện thoại sau khi cả hai bên đã chuyển chữ thường và bỏ dấu tiếng Việt (“đ” → “d”). Với số điện thoại, bỏ khoảng trắng trong từ khoá trước khi so (gõ “0901 234” vẫn tìm được). Từ khoá rỗng = tất cả.</li>
+    <li><strong>R-29 — Xoá:</strong> xoá vĩnh viễn bản ghi người chơi, toàn bộ lượt chơi và mã thiết bị của người đó trong một giao dịch. Log chỉ ghi mã số người chơi (<code>id</code>), không ghi thông tin cá nhân.</li>
+    <li><strong>R-31 — Lưu giữ:</strong> dữ liệu được giữ tới khi admin xoá. Khi người chơi yêu cầu xoá dữ liệu, admin tìm theo email và xoá (F-28).</li>
+  </ul>
+
+  <h3 id="csv">R-30 · Định dạng file CSV</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Thuộc tính</th><th>Quy định</th></tr>
+    <tr><td>Mã hoá</td><td>UTF-8 có BOM (để Excel hiển thị đúng tiếng Việt)</td></tr>
+    <tr><td>Phân cách / xuống dòng</td><td>Dấu phẩy <code>,</code> · CRLF</td></tr>
+    <tr><td>Bao chuỗi</td><td>Mọi ô bọc trong <code>"</code>; dấu <code>"</code> bên trong viết thành <code>""</code></td></tr>
+    <tr><td>Cột (theo thứ tự)</td><td>STT, Họ tên, Email, Số điện thoại, Ngày đăng ký, Cập nhật gần nhất, Số lượt chơi, Điểm cao nhất, Lần chơi gần nhất</td></tr>
+    <tr><td>Ngày giờ</td><td><code>dd/mm/yyyy HH:mm</code> theo giờ Việt Nam (Asia/Ho_Chi_Minh); chưa chơi lượt nào → ô trống</td></tr>
+    <tr><td>Số điện thoại</td><td>Dạng nhóm <code>0901 234 567</code> để Excel giữ số 0 đầu</td></tr>
+    <tr><td>Chống chèn công thức</td><td>Ô bắt đầu bằng <code>=</code> <code>+</code> <code>-</code> <code>@</code>, tab hoặc xuống dòng được thêm dấu <code>'</code> ở đầu</td></tr>
+    <tr><td>Phạm vi, thứ tự</td><td>Đúng kết quả tìm kiếm và thứ tự sắp xếp đang xem; tối đa 50.000 dòng</td></tr>
+  </table></div>
+<pre><code>"STT","Họ tên","Email","Số điện thoại","Ngày đăng ký","Cập nhật gần nhất","Số lượt chơi","Điểm cao nhất","Lần chơi gần nhất"
+"1","Nguyễn Văn An","an@example.com","0901 234 567","17/11/2026 09:12","17/11/2026 09:12","14","37","17/11/2026 10:40"</code></pre>
+
+  <h2 id="database">14. Database <span class="badge new">Mới</span></h2>
+  <p>Dùng <strong>PostgreSQL 17</strong>, chạy thành dịch vụ thứ hai <code>db</code> trong Docker Compose, dữ liệu nằm trong volume có tên để không mất khi tạo lại container. Cổng database <strong>không</strong> mở ra ngoài máy; chỉ dịch vụ <code>app</code> kết nối được.</p>
+
+  <h3>Bảng <code>players</code></h3>
+  <div class="table-wrap"><table>
+    <tr><th>Cột</th><th>Kiểu</th><th>Ràng buộc</th></tr>
+    <tr><td><code>id</code></td><td>bigint, tự tăng</td><td>Khoá chính</td></tr>
+    <tr><td><code>full_name</code></td><td>text</td><td>Theo R-17</td></tr>
+    <tr><td><code>email</code></td><td>text</td><td>Theo R-18, <strong>duy nhất</strong></td></tr>
+    <tr><td><code>phone</code></td><td>text</td><td>Theo R-19, dạng <code>0xxxxxxxxx</code></td></tr>
+    <tr><td><code>search_text</code></td><td>text</td><td>Họ tên + email + số điện thoại đã bỏ dấu, chữ thường (R-28); cập nhật mỗi lần ghi</td></tr>
+    <tr><td><code>consented_at</code></td><td>timestamptz</td><td>Bắt buộc</td></tr>
+    <tr><td><code>created_at</code>, <code>updated_at</code></td><td>timestamptz</td><td>Mặc định thời điểm ghi</td></tr>
+  </table></div>
+
+  <h3>Bảng <code>player_devices</code></h3>
+  <div class="table-wrap"><table>
+    <tr><th>Cột</th><th>Kiểu</th><th>Ràng buộc</th></tr>
+    <tr><td><code>token_hash</code></td><td>bytea</td><td>Khoá chính; SHA-256 của mã người chơi (R-24)</td></tr>
+    <tr><td><code>player_id</code></td><td>bigint</td><td>Khoá ngoại → <code>players.id</code>, xoá theo (cascade)</td></tr>
+    <tr><td><code>created_at</code>, <code>last_used_at</code></td><td>timestamptz</td><td>—</td></tr>
+  </table></div>
+
+  <h3>Bảng <code>rounds</code></h3>
+  <div class="table-wrap"><table>
+    <tr><th>Cột</th><th>Kiểu</th><th>Ràng buộc</th></tr>
+    <tr><td><code>id</code></td><td>bigint, tự tăng</td><td>Khoá chính</td></tr>
+    <tr><td><code>player_id</code></td><td>bigint</td><td>Khoá ngoại → <code>players.id</code>, xoá theo (cascade)</td></tr>
+    <tr><td><code>round_id</code></td><td>uuid</td><td>Duy nhất cùng <code>player_id</code> (R-25)</td></tr>
+    <tr><td><code>score</code>, <code>hits</code>, <code>bombs_hit</code>, <code>missed</code></td><td>integer</td><td>Theo R-23</td></tr>
+    <tr><td><code>ended_at</code></td><td>timestamptz</td><td>Thời điểm kết thúc lượt (từ trình duyệt)</td></tr>
+    <tr><td><code>received_at</code></td><td>timestamptz</td><td>Thời điểm máy chủ nhận</td></tr>
+  </table></div>
+  <p>Chỉ mục: <code>players(created_at)</code>, <code>rounds(player_id)</code>. Số lượt chơi, điểm cao nhất, lần chơi gần nhất ở S-09 được tính từ bảng <code>rounds</code>. Cấu trúc database được tạo / nâng cấp tự động khi máy chủ khởi động (file migration có đánh số phiên bản).</p>
+
+  <h2 id="api">15. API máy chủ <span class="badge new">Mới</span></h2>
+  <p>Dữ liệu gửi / nhận dạng JSON (trừ file CSV). Lỗi trả về <code>{ "error": "mã_lỗi", "fields": { "email": "Email không hợp lệ" } }</code>.</p>
+  <div class="table-wrap"><table>
+    <tr><th>Phương thức · Đường dẫn</th><th>Quyền</th><th>Mục đích</th><th>Kết quả</th></tr>
+    <tr><td><code>POST /api/players</code></td><td>Công khai</td><td>Đăng ký / nhận lại người chơi (F-19, F-20)</td><td>200 <code>{ token, displayName }</code> · 422 lỗi dữ liệu · 429 quá giới hạn</td></tr>
+    <tr><td><code>POST /api/rounds</code></td><td>Mã người chơi</td><td>Gửi kết quả một lượt (F-22)</td><td>201 đã lưu · 200 đã có (gửi lại) · 401 mã không hợp lệ · 422 dữ liệu vô lý</td></tr>
+    <tr><td><code>POST /api/admin/login</code></td><td>Công khai</td><td>Đăng nhập admin (F-24)</td><td>204 + cookie · 401 sai · 429 bị khoá</td></tr>
+    <tr><td><code>POST /api/admin/logout</code></td><td>Admin</td><td>Đăng xuất (F-25)</td><td>204</td></tr>
+    <tr><td><code>GET /api/admin/players?q=&amp;sort=&amp;dir=&amp;page=</code></td><td>Admin</td><td>Danh sách, tìm kiếm (F-26, F-27)</td><td>200 <code>{ total, page, pageSize, items[] }</code></td></tr>
+    <tr><td><code>DELETE /api/admin/players/:id</code></td><td>Admin</td><td>Xoá người chơi (F-28)</td><td>204 · 404 không tồn tại</td></tr>
+    <tr><td><code>GET /api/admin/players.csv?q=&amp;sort=&amp;dir=</code></td><td>Admin</td><td>Xuất CSV (F-29)</td><td>200 <code>text/csv; charset=utf-8</code> kèm tên file</td></tr>
+    <tr><td><code>GET /healthz</code></td><td>Công khai</td><td>Kiểm tra sức khoẻ; trả lỗi nếu không kết nối được database</td><td>200 <code>ok</code> · 503</td></tr>
+  </table></div>
+  <p>Các địa chỉ trang: <code>/</code> (game), <code>/admin</code> (S-08 / S-09). Mọi phản hồi API quản trị có <code>Cache-Control: no-store</code>.</p>
+
+  <h2 id="trien-khai">16. Cấu hình triển khai <span class="badge new">Mới</span></h2>
+  <div class="table-wrap"><table>
+    <tr><th>Biến môi trường</th><th>Dịch vụ</th><th>Ý nghĩa</th></tr>
+    <tr><td><code>ADMIN_USERNAME</code>, <code>ADMIN_PASSWORD</code></td><td>app</td><td>Tài khoản admin (R-26)</td></tr>
+    <tr><td><code>DATABASE_URL</code></td><td>app</td><td>Chuỗi kết nối PostgreSQL</td></tr>
+    <tr><td><code>POSTGRES_USER</code>, <code>POSTGRES_PASSWORD</code>, <code>POSTGRES_DB</code></td><td>db</td><td>Tài khoản database</td></tr>
+    <tr><td><code>TRUST_PROXY</code></td><td>app</td><td><code>1</code> khi chạy sau ngrok / proxy để lấy đúng IP người dùng (F-30) và bật cookie <code>Secure</code></td></tr>
+  </table></div>
+  <ul>
+    <li>Kho Git có file mẫu <code>.env.example</code> (không chứa giá trị thật); file <code>.env</code> thật nằm trong <code>.gitignore</code>.</li>
+    <li>Dịch vụ <code>app</code> chỉ khởi động khi <code>db</code> đã sẵn sàng (healthcheck).</li>
+  </ul>
+<pre><code>REGISTRATION_RATE_LIMIT  = 10 / giờ / IP
+ROUND_RATE_LIMIT         = 120 / giờ / người chơi
+LOGIN_MAX_FAILS          = 5 trong 15 phút / IP → khoá 15 phút
+SESSION_ABSOLUTE_HOURS   = 8
+SESSION_IDLE_MINUTES     = 30
+ADMIN_PAGE_SIZE          = 20
+CSV_MAX_ROWS             = 50000
+PENDING_ROUNDS_MAX       = 20
+ROUND_MAX_OBJECTS        = 150</code></pre>
 
   <div class="pager">
     <a class="btn" href="03-man-hinh.html">← 3. Màn hình</a>
