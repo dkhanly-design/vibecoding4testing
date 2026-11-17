@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Đập Chuột</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <span class="brand">🐭 Đập Chuột</span>
+  <button id="btn-sound" class="icon-btn" type="button" aria-label="Tắt tiếng">🔊</button>
+</header>
+
+<!-- ================= S-01 · Bắt đầu ================= -->
+<section id="screen-start" class="screen" data-screen="start" aria-labelledby="start-title">
+  <div class="panel">
+    <h1 id="start-title" class="title" tabindex="-1">Đập Chuột</h1>
+    <p class="rules">Đập 🐭 được +1 · Tránh 💣 bị −1.<br>Bạn có 30 giây!</p>
+    <button id="btn-start" class="btn btn-primary btn-lg" type="button">Bắt đầu</button>
+    <p class="key-hint">Mẹo: dùng phím Q W E / A S D / Z X C hoặc bàn phím số để đập.</p>
+
+    <div class="board-mini">
+      <h2 class="subtitle">Top 5</h2>
+      <ol id="mini-board" class="board-list"></ol>
+      <p id="mini-empty" class="empty">Chưa có ai ghi điểm. Bạn là người đầu tiên!</p>
+      <button id="btn-view-board" class="link-btn" type="button">Xem đầy đủ</button>
+    </div>
+    <p class="storage-warn" hidden>Không lưu được điểm trên trình duyệt này. Bạn vẫn có thể chơi bình thường.</p>
+  </div>
+</section>
+
+<!-- ================= S-03 · Chơi (kèm S-02 Đếm ngược, S-04 Tạm dừng) ================= -->
+<section id="screen-play" class="screen" data-screen="play" aria-label="Màn hình chơi" hidden>
+  <div class="play-wrap">
+    <div class="status-bar">
+      <span class="stat-score">Điểm: <strong id="score">0</strong></span>
+      <span class="stat-time" id="time-box">⏱ <strong id="time">30</strong></span>
+      <button id="btn-pause" class="icon-btn" type="button" aria-label="Tạm dừng">⏸</button>
+    </div>
+    <div class="progress" aria-hidden="true"><div id="progress-fill" class="progress-fill"></div></div>
+    <p id="phase-flash" class="phase-flash" aria-hidden="true">Nhanh hơn!</p>
+
+    <div id="grid" class="grid" role="group" aria-label="Lưới 9 hang"></div>
+
+    <p id="phase-label" class="phase-label">Pha 1 / 3</p>
+  </div>
+
+  <!-- S-02 · Đếm ngược -->
+  <div id="overlay-countdown" class="overlay" hidden>
+    <p id="countdown-num" class="countdown-num" aria-live="assertive">3</p>
+    <p class="overlay-sub">Chuẩn bị…</p>
+  </div>
+
+  <!-- S-04 · Tạm dừng -->
+  <div id="overlay-pause" class="overlay" role="dialog" aria-modal="true" aria-labelledby="pause-title" hidden>
+    <div class="overlay-box">
+      <h2 id="pause-title" class="overlay-title">Tạm dừng</h2>
+      <p id="pause-info" class="overlay-sub">Điểm: 0 · Còn 30 giây</p>
+      <button id="btn-resume" class="btn btn-primary" type="button">Tiếp tục</button>
+      <button id="btn-quit" class="btn btn-outline btn-on-dark-outline" type="button">Thoát</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= S-05 · Kết quả ================= -->
+<section id="screen-result" class="screen" data-screen="result" aria-labelledby="result-title" hidden>
+  <div class="panel">
+    <h1 id="result-title" class="title" tabindex="-1">Hết giờ!</h1>
+    <p id="result-score" class="result-score">0</p>
+    <p id="result-record" class="result-note record" hidden>🎉 Kỷ lục mới!</p>
+    <p id="result-top5" class="result-note" hidden>Bạn vào Top 5</p>
+
+    <ul class="stats">
+      <li><span>🐭 Đập trúng</span><strong id="st-hits">0</strong></li>
+      <li><span>💣 Đập phải</span><strong id="st-bombs">0</strong></li>
+      <li><span>🎯 Chính xác</span><strong id="st-acc">—</strong></li>
+    </ul>
+
+    <form id="name-form" class="name-form" novalidate hidden>
+      <div class="field" id="name-field">
+        <label for="name-input">Tên của bạn</label>
+        <input id="name-input" class="input" type="text" autocomplete="nickname" enterkeyhint="done" aria-describedby="name-hint">
+        <span id="name-hint" class="hint">Tối đa 12 ký tự</span>
+      </div>
+      <button class="btn btn-success" type="submit">Lưu</button>
+      <button id="btn-skip" class="link-btn" type="button">Bỏ qua</button>
+    </form>
+
+    <p id="result-need" class="result-note muted" hidden></p>
+    <p id="result-debug" class="result-note muted" hidden>Chế độ debug: kết quả không được ghi vào Top 5.</p>
+
+    <div class="actions">
+      <button id="btn-again-result" class="btn btn-primary" type="button">Chơi lại</button>
+      <button id="btn-board-result" class="btn btn-outline" type="button">Xem Top 5</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= S-06 · Bảng Top 5 ================= -->
+<section id="screen-board" class="screen" data-screen="board" aria-labelledby="board-title" hidden>
+  <div class="panel">
+    <h1 id="board-title" class="title" tabindex="-1">Top 5</h1>
+    <ol id="full-board" class="board-list board-full"></ol>
+    <p id="board-empty" class="empty">Chưa có ai ghi điểm. Bạn là người đầu tiên!</p>
+    <div class="actions">
+      <button id="btn-again-board" class="btn btn-primary" type="button">Chơi lại</button>
+      <button id="btn-home" class="btn btn-outline" type="button">Về trang chủ</button>
+    </div>
+    <button id="btn-clear" class="link-btn small" type="button">Xoá bảng điểm</button>
+    <p class="storage-warn" hidden>Không lưu được điểm trên trình duyệt này. Bạn vẫn có thể chơi bình thường.</p>
+  </div>
+</section>
+
+<!-- Thông báo cho trình đọc màn hình -->
+<div id="sr-live" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+<!-- Chỉ hiện khi ?debug=1 -->
+<pre id="debug-panel" class="debug-panel" hidden></pre>
+
+<script src="game.js"></script>
+</body>
+</html>
