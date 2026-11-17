@@ -1,4 +1,4 @@
-# Chỉ cần server.js, package.json, app/ và design/ trong image
+# Chỉ cần server.js, src/, migrations/, app/, admin/, design/ và package*.json trong image
 .git
 .gitignore
 .dockerignore

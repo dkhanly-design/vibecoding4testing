@@ -7,6 +7,7 @@ yarn-error.log*
 # Biến môi trường, bí mật
 .env
 .env.*
+!.env.example
 
 # Hệ điều hành, trình soạn thảo
 .DS_Store

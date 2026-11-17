@@ -17,6 +17,7 @@
 <section id="screen-start" class="screen" data-screen="start" aria-labelledby="start-title">
   <div class="panel">
     <h1 id="start-title" class="title" tabindex="-1">Đập Chuột</h1>
+    <p id="greeting" class="greeting" hidden>Xin chào, <strong id="greet-name"></strong>! · <button id="btn-not-me" class="link-btn inline" type="button">Không phải bạn?</button></p>
     <p class="rules">Đập 🐭 được +1 · Tránh 💣 bị −1.<br>Bạn có 30 giây!</p>
     <button id="btn-start" class="btn btn-primary btn-lg" type="button">Bắt đầu</button>
     <p class="key-hint">Mẹo: dùng phím Q W E / A S D / Z X C hoặc bàn phím số để đập.</p>
@@ -28,6 +29,42 @@
       <button id="btn-view-board" class="link-btn" type="button">Xem đầy đủ</button>
     </div>
     <p class="storage-warn" hidden>Không lưu được điểm trên trình duyệt này. Bạn vẫn có thể chơi bình thường.</p>
+  </div>
+</section>
+
+<!-- ================= S-07 · Đăng ký ================= -->
+<section id="screen-register" class="screen" data-screen="register" aria-labelledby="register-title" hidden>
+  <div class="panel">
+    <h1 id="register-title" class="title title-md" tabindex="-1">Đăng ký chơi</h1>
+    <p class="rules small">Điền thông tin một lần, lần sau vào chơi ngay.</p>
+
+    <form id="register-form" class="reg-form" novalidate>
+      <div class="field" id="reg-name-field">
+        <label for="reg-name">Họ và tên</label>
+        <input id="reg-name" class="input" type="text" name="name" autocomplete="name" maxlength="100" aria-describedby="reg-name-hint" required>
+        <span id="reg-name-hint" class="hint" hidden></span>
+      </div>
+      <div class="field" id="reg-email-field">
+        <label for="reg-email">Email</label>
+        <input id="reg-email" class="input" type="email" name="email" autocomplete="email" inputmode="email" maxlength="254" aria-describedby="reg-email-hint" required>
+        <span id="reg-email-hint" class="hint" hidden></span>
+      </div>
+      <div class="field" id="reg-phone-field">
+        <label for="reg-phone">Số điện thoại</label>
+        <input id="reg-phone" class="input" type="tel" name="tel" autocomplete="tel" inputmode="tel" maxlength="20" aria-describedby="reg-phone-hint" required>
+        <span id="reg-phone-hint" class="hint" hidden></span>
+      </div>
+      <div class="field" id="reg-consent-field">
+        <label class="check">
+          <input id="reg-consent" type="checkbox" aria-describedby="reg-consent-hint">
+          <span>Tôi đồng ý để ban tổ chức lưu họ tên, email, số điện thoại và điểm chơi của tôi nhằm quản lý người chơi. Tôi có thể yêu cầu xoá dữ liệu bất kỳ lúc nào.</span>
+        </label>
+        <span id="reg-consent-hint" class="hint" hidden></span>
+      </div>
+      <p id="reg-error" class="form-error" role="alert" hidden></p>
+      <button id="reg-submit" class="btn btn-primary btn-lg" type="submit">Đăng ký &amp; chơi</button>
+      <button id="btn-reg-back" class="link-btn" type="button">Quay lại</button>
+    </form>
   </div>
 </section>
 

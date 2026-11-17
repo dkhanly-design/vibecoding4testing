@@ -1,5 +1,6 @@
 name: dap-chuot
 
+# Biến ${...} lấy từ file .env cùng thư mục (tạo từ .env.example).
 services:
   app:
     build: .
@@ -8,8 +9,42 @@ services:
       - "3000:3000"
     environment:
       PORT: "3000"
+      ADMIN_USERNAME: ${ADMIN_USERNAME:?Thiếu ADMIN_USERNAME trong .env}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Thiếu ADMIN_PASSWORD trong .env}
+      PGHOST: db
+      PGPORT: "5432"
+      PGUSER: ${POSTGRES_USER:?Thiếu POSTGRES_USER trong .env}
+      PGPASSWORD: ${POSTGRES_PASSWORD:?Thiếu POSTGRES_PASSWORD trong .env}
+      PGDATABASE: ${POSTGRES_DB:?Thiếu POSTGRES_DB trong .env}
+      TRUST_PROXY: ${TRUST_PROXY:-0}
+    depends_on:
+      db:
+        condition: service_healthy
     init: true
     read_only: true
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped
+
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?Thiếu POSTGRES_USER trong .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Thiếu POSTGRES_PASSWORD trong .env}
+      POSTGRES_DB: ${POSTGRES_DB:?Thiếu POSTGRES_DB trong .env}
+      TZ: Asia/Ho_Chi_Minh
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    # Không mở cổng 5432 ra máy — chỉ dịch vụ app kết nối được qua mạng nội bộ
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+
+volumes:
+  dbdata:

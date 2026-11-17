@@ -279,3 +279,23 @@ button { font: inherit; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* ---------- S-07 · Đăng ký ---------- */
+.greeting { margin: 0; color: var(--text-primary); }
+.link-btn.inline { padding: 0 var(--space-1); font-size: inherit; vertical-align: baseline; }
+.title-md { font-size: var(--font-size-3xl); }
+.rules.small { font-size: var(--font-size-md); color: var(--text-secondary); }
+.reg-form { display: flex; flex-direction: column; gap: var(--space-5); text-align: left; }
+.reg-form .field .hint { color: var(--state-error); }
+.check {
+  display: flex; align-items: flex-start; gap: var(--space-3);
+  font-size: var(--font-size-sm); line-height: var(--line-height-snug); cursor: pointer;
+  min-height: var(--tap-target-min); padding: var(--space-2) 0;
+}
+.check input { flex: none; width: 22px; height: 22px; margin: 0; accent-color: var(--color-blue-600); }
+.field.is-error .check { color: var(--state-error); }
+.form-error {
+  margin: 0; padding: var(--space-4) var(--space-5); border-radius: var(--radius-md);
+  background: var(--state-error-bg); color: var(--state-error); font-size: var(--font-size-sm);
+}
+.btn[disabled] { opacity: .6; cursor: progress; transform: none; box-shadow: none; }

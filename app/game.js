@@ -44,6 +44,7 @@
   const screens = {
     start: $("screen-start"), play: $("screen-play"),
     result: $("screen-result"), board: $("screen-board"),
+    register: $("screen-register"),
   };
   const el = {
     sound: $("btn-sound"), start: $("btn-start"), viewBoard: $("btn-view-board"),
@@ -61,6 +62,9 @@
     fullBoard: $("full-board"), boardEmpty: $("board-empty"),
     againBoard: $("btn-again-board"), home: $("btn-home"), clear: $("btn-clear"),
     live: $("sr-live"), debug: $("debug-panel"),
+    greeting: $("greeting"), greetName: $("greet-name"), notMe: $("btn-not-me"),
+    regForm: $("register-form"), regName: $("reg-name"), regEmail: $("reg-email"), regPhone: $("reg-phone"),
+    regConsent: $("reg-consent"), regSubmit: $("reg-submit"), regError: $("reg-error"), regBack: $("btn-reg-back"),
   };
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
@@ -506,6 +510,7 @@
     if (round.current) hideCurrent();
     renderClock(0);
     round.endedAt = new Date().toISOString();
+    queueRound(round);                                       // F-22
     audio.play("end");
     if (DEBUG) renderDebug(ROUND_MS);
     uiTimer = setTimeout(showResult, RESULT_DELAY_MS);
@@ -535,7 +540,7 @@
       el.resNeed.hidden = true;
     }
     setNameError("");
-    el.nameInput.value = settings.lastName;
+    el.nameInput.value = settings.lastName || (player ? graphemes(player.displayName).slice(0, NAME_MAX_LENGTH).join("") : "");
     showScreen("result");
     if (canSave) {
       audio.play("top5");
@@ -633,10 +638,218 @@
     showBoard(-1);
   });
 
+
+  // =====================================================================
+  // F-19 → F-23 · Đăng ký người chơi, gửi điểm lên máy chủ (docs/02 · mục 8)
+  // =====================================================================
+  const KEY_PLAYER = "dapchuot.v1.player";
+  const KEY_PENDING = "dapchuot.v1.pendingRounds";
+  const PENDING_MAX = 20;
+
+  function loadPlayer() {
+    const raw = storage.read(KEY_PLAYER);
+    if (raw && typeof raw.token === "string" && /^[A-Za-z0-9_-]{20,100}$/.test(raw.token) && typeof raw.displayName === "string") {
+      return { token: raw.token, displayName: raw.displayName.slice(0, 40) };
+    }
+    return null;
+  }
+  let player = loadPlayer();
+  let previousToken = null;   // R-24a: mã cũ của máy này, gửi kèm khi đăng ký lại
+  function setPlayer(p) {
+    player = p;
+    if (p) storage.write(KEY_PLAYER, p);
+    else { try { localStorage.removeItem(KEY_PLAYER); } catch { /* không lưu được */ } }
+    renderGreeting();
+  }
+  function forgetPlayer() {
+    if (player) previousToken = player.token;
+    setPlayer(null);
+  }
+  function renderGreeting() {
+    el.greeting.hidden = !player;
+    if (player) el.greetName.textContent = player.displayName;
+  }
+
+  // ---------- Kiểm tra dữ liệu trên trình duyệt (bản sao R-17 → R-19) ----------
+  const cleanSpaces = (s) => String(s).normalize("NFC").replace(/\s+/gu, " ").trim();
+  const checks = {
+    fullName(raw) {
+      const v = cleanSpaces(raw);
+      if (!v) return "Vui lòng nhập họ và tên";
+      const n = graphemes(v).length;
+      if (n < 2 || n > 50) return "Họ tên từ 2 đến 50 ký tự";
+      if (!/^[\p{L}\p{M} '.\-]+$/u.test(v) || !/\p{L}/u.test(v)) return "Họ tên chỉ gồm chữ cái và khoảng trắng";
+      return "";
+    },
+    email(raw) {
+      const v = String(raw).trim().toLowerCase();
+      if (!v) return "Vui lòng nhập email";
+      const parts = v.split("@");
+      if (v.length > 254 || parts.length !== 2) return "Email không hợp lệ";
+      const [local, domain] = parts;
+      if (!/^[a-z0-9._%+\-=']{1,64}$/.test(local) || local.startsWith(".") || local.endsWith(".") || local.includes("..")) return "Email không hợp lệ";
+      if (!/^([a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,}$/.test(domain)) return "Email không hợp lệ";
+      return "";
+    },
+    phone(raw) {
+      let v = String(raw).trim();
+      if (!v) return "Vui lòng nhập số điện thoại";
+      v = v.replace(/[\s.\-()]/g, "");
+      if (v.startsWith("+84")) v = "0" + v.slice(3);
+      else if (v.startsWith("84") && v.length === 11) v = "0" + v.slice(2);
+      return /^0[35789]\d{8}$/.test(v) ? "" : "Số điện thoại không hợp lệ";
+    },
+    consent(checked) { return checked ? "" : "Vui lòng đồng ý để tiếp tục"; },
+  };
+  const regFields = {
+    fullName: { input: el.regName, field: $("reg-name-field"), hint: $("reg-name-hint") },
+    email: { input: el.regEmail, field: $("reg-email-field"), hint: $("reg-email-hint") },
+    phone: { input: el.regPhone, field: $("reg-phone-field"), hint: $("reg-phone-hint") },
+    consent: { input: el.regConsent, field: $("reg-consent-field"), hint: $("reg-consent-hint") },
+  };
+  const valueOf = (key) => key === "consent" ? regFields.consent.input.checked : regFields[key].input.value;
+  function setFieldError(key, msg) {
+    const f = regFields[key];
+    f.field.classList.toggle("is-error", !!msg);
+    f.hint.textContent = msg;
+    f.hint.hidden = !msg;
+    f.input.setAttribute("aria-invalid", msg ? "true" : "false");
+  }
+  function validateField(key) {
+    const msg = checks[key](valueOf(key));
+    setFieldError(key, msg);
+    return msg;
+  }
+  Object.keys(regFields).forEach((key) => {
+    const input = regFields[key].input;
+    input.addEventListener(key === "consent" ? "change" : "blur", () => {
+      if (key === "consent" || input.value) validateField(key);
+    });
+    input.addEventListener("input", () => { if (regFields[key].field.classList.contains("is-error")) validateField(key); });
+  });
+  function setRegError(msg) {
+    el.regError.textContent = msg;
+    el.regError.hidden = !msg;
+  }
+
+  function showRegister() {
+    state = "idle";
+    Object.keys(regFields).forEach((k) => setFieldError(k, ""));
+    setRegError("");
+    showScreen("register");
+    $("register-title").focus();
+  }
+
+  let registering = false;
+  el.regForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (registering) return;                                 // TC-52: chống gửi hai lần
+    setRegError("");
+    const errors = Object.keys(regFields).filter((k) => validateField(k));
+    if (errors.length) { regFields[errors[0]].input.focus(); return; }
+    registering = true;
+    el.regSubmit.disabled = true;
+    el.regSubmit.textContent = "Đang lưu…";
+    try {
+      const headers = { "Content-Type": "application/json" };
+      if (previousToken) headers.Authorization = `Bearer ${previousToken}`;
+      const res = await fetch("/api/players", {
+        method: "POST", headers,
+        body: JSON.stringify({
+          fullName: el.regName.value, email: el.regEmail.value, phone: el.regPhone.value, consent: el.regConsent.checked,
+        }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        previousToken = null;
+        setPlayer({ token: data.token, displayName: data.displayName });
+        el.regForm.reset();
+        startRound();
+        return;
+      }
+      if (res.status === 422) {
+        const data = await res.json().catch(() => ({}));
+        const fields = (data && data.fields) || {};
+        Object.keys(regFields).forEach((k) => setFieldError(k, fields[k] || ""));
+        const first = Object.keys(regFields).find((k) => fields[k]);
+        if (first) regFields[first].input.focus();
+        else setRegError("Thông tin chưa hợp lệ, vui lòng kiểm tra lại.");
+      } else if (res.status === 429) {
+        setRegError("Bạn thao tác quá nhanh, vui lòng thử lại sau.");
+      } else {
+        setRegError("Không kết nối được máy chủ. Vui lòng thử lại.");
+      }
+    } catch {
+      setRegError("Không kết nối được máy chủ. Vui lòng thử lại.");
+    } finally {
+      registering = false;
+      el.regSubmit.disabled = false;
+      el.regSubmit.textContent = "Đăng ký & chơi";
+    }
+  });
+  el.regBack.addEventListener("click", goHome);
+  el.notMe.addEventListener("click", () => { forgetPlayer(); showRegister(); });
+
+  // Bắt đầu lượt: chưa đăng ký → mở form (F-19)
+  function requestStart() {
+    if (!player) { showRegister(); return; }
+    state = state === "ended" ? "idle" : state;
+    startRound();
+  }
+
+  // ---------- F-22 · Gửi điểm, hàng chờ (R-25) ----------
+  function uuid() {
+    if (crypto.randomUUID) return crypto.randomUUID();
+    const b = crypto.getRandomValues(new Uint8Array(16));
+    b[6] = (b[6] & 0x0f) | 0x40; b[8] = (b[8] & 0x3f) | 0x80;
+    const h = Array.from(b, (x) => x.toString(16).padStart(2, "0")).join("");
+    return `${h.slice(0, 8)}-${h.slice(8, 12)}-${h.slice(12, 16)}-${h.slice(16, 20)}-${h.slice(20)}`;
+  }
+  function loadPending() {
+    const raw = storage.read(KEY_PENDING);
+    return Array.isArray(raw) ? raw.filter((r) => r && typeof r.roundId === "string").slice(-PENDING_MAX) : [];
+  }
+  const savePending = (list) => storage.write(KEY_PENDING, list.slice(-PENDING_MAX));
+  function queueRound(r) {
+    if (DEBUG || !player) return;
+    const list = loadPending();
+    list.push({ roundId: uuid(), score: r.score, hits: r.hits, bombsHit: r.bombsHit, missed: r.missed, endedAt: r.endedAt });
+    savePending(list);
+    flushPending();
+  }
+  let flushing = false;
+  async function flushPending() {
+    if (flushing || !player) return;
+    flushing = true;
+    try {
+      let list = loadPending();
+      while (list.length && player) {
+        const item = list[0];
+        let res;
+        try {
+          res = await fetch("/api/rounds", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${player.token}` },
+            body: JSON.stringify(item),
+          });
+        } catch { break; }                                    // mất mạng: giữ lại, gửi sau
+        if (res.ok || res.status === 422) { list = list.slice(1); savePending(list); continue; }
+        if (res.status === 401) {                             // người chơi đã bị xoá (F-21)
+          savePending([]);
+          setPlayer(null);
+          break;
+        }
+        break;                                                // 429 / 5xx: thử lại sau
+      }
+    } finally {
+      flushing = false;
+    }
+  }
+
   // ---------- Nút điều hướng ----------
-  el.start.addEventListener("click", startRound);
-  el.againResult.addEventListener("click", () => { state = "idle"; startRound(); });
-  el.againBoard.addEventListener("click", () => { state = "idle"; startRound(); });
+  el.start.addEventListener("click", requestStart);
+  el.againResult.addEventListener("click", () => { state = "idle"; requestStart(); });
+  el.againBoard.addEventListener("click", () => { state = "idle"; requestStart(); });
   el.viewBoard.addEventListener("click", () => showBoard(-1));
   el.boardResult.addEventListener("click", () => { round = null; state = "idle"; showBoard(-1); });
   el.home.addEventListener("click", goHome);
@@ -688,5 +901,7 @@
   renderSoundButton();
   updateStorageWarning();
   renderMini();
+  renderGreeting();
   showScreen("start");
+  flushPending();                                            // R-25: gửi bù khi mở trang
 })();

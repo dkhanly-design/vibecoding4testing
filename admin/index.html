@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Người chơi · Quản trị Đập Chuột</title>
+<link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+<header class="topbar">
+  <span class="brand">🐭 Quản trị Đập Chuột</span>
+  <button id="btn-logout" class="btn btn-outline btn-sm" type="button">Đăng xuất</button>
+</header>
+
+<main>
+  <h1 class="page-title">Danh sách người chơi</h1>
+
+  <div class="toolbar">
+    <div class="search" role="search">
+      <span class="icon" aria-hidden="true">⌕</span>
+      <label for="q" class="sr-only">Tìm kiếm</label>
+      <input id="q" class="input" type="search" placeholder="Tìm theo họ tên, email, số điện thoại" maxlength="100" autocomplete="off">
+      <button id="btn-clear-q" class="clear" type="button" aria-label="Xoá nội dung tìm" hidden>×</button>
+    </div>
+    <a id="btn-export" class="btn btn-outline" href="/api/admin/players.csv" download>⬇ Xuất CSV</a>
+  </div>
+
+  <p id="summary" class="summary" aria-live="polite"></p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th data-sort="full_name"><button type="button">Họ tên</button></th>
+          <th data-sort="email"><button type="button">Email</button></th>
+          <th data-sort="phone"><button type="button">Số điện thoại</button></th>
+          <th data-sort="created_at"><button type="button">Đăng ký</button></th>
+          <th data-sort="updated_at"><button type="button">Cập nhật</button></th>
+          <th data-sort="rounds_count" class="num"><button type="button">Lượt</button></th>
+          <th data-sort="best_score" class="num"><button type="button">Điểm cao</button></th>
+          <th data-sort="last_played_at"><button type="button">Chơi gần nhất</button></th>
+          <th><span class="sr-only">Thao tác</span></th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+
+  <nav class="pager" aria-label="Phân trang">
+    <button id="btn-prev" class="btn btn-outline btn-sm" type="button">‹ Trước</button>
+    <span id="page-info"></span>
+    <button id="btn-next" class="btn btn-outline btn-sm" type="button">Sau ›</button>
+  </nav>
+</main>
+
+<!-- S-10 · Xác nhận xoá -->
+<dialog id="confirm-delete" aria-labelledby="del-title" aria-describedby="del-desc">
+  <h2 id="del-title">Xoá người chơi?</h2>
+  <p id="del-desc"></p>
+  <div class="actions">
+    <button id="btn-del-cancel" class="btn btn-outline" type="button" autofocus>Huỷ</button>
+    <button id="btn-del-ok" class="btn btn-danger" type="button">Xoá vĩnh viễn</button>
+  </div>
+</dialog>
+
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="/admin/admin.js"></script>
+</body>
+</html>
